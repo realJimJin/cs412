@@ -17,6 +17,6 @@ def home(request):
 
 def base(request):
    '''base.html'''
-   template_name = 'base.html'
+   template_name = 'quotes/base.html'
    return render(request, template_name) 
 
