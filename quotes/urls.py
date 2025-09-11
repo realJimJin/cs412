@@ -6,5 +6,6 @@ from . import views
 #URL patterns specific to the quotes app: 
 
 urlpatterns = [
- path(r'', views.home, name="home"),
+ #path(r'', views.home, name="home"),
+ path(r'', views.base, name="base"), 
 ]

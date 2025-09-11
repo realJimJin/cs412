@@ -15,5 +15,8 @@ def home(request):
     return HttpResponse(response_text) 
 
 
-
+def base(request):
+   '''base.html'''
+   template_name = 'base.html'
+   return render(request, template_name) 
 
