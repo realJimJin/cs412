@@ -3,12 +3,19 @@
 {% load static %}
 <html>
     <head>
-        <title>Hello, world!</title>
+        <title>Oscar Wilde Quote of the Day</title>
         <link rel="stylesheet" href="{% static 'styles.css' %}">
     </head>
     <body>
+        <div class="grid-container">
+        <header>
+            <h1>Paul McCartney Quote of the Day</h1>
+        </header>
+       </div> 
         <nav>
             <li><a href="{% url 'about_page' %}">About</a></li>
+            <li><a href="{% url 'quote_page' %}">Quote</a></li>
+            <li><a href="{% url 'show_all_page' %}">Show_All</a></li>
         </nav>
         
         <!-- put page specific content here  -->
