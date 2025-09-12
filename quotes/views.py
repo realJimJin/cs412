@@ -1,8 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse
+
 import time
+import random
 
 #create view here
+
+quotes = ["Be yourself; everyone else is already taken", "Life is too important to be taken seriously", "I can resist everything except temptation"]
+images = ["https://www.flickriver.com/photos/trialsanderrors/3318337409/","https://publicdomainreview.org/essay/on-oscar-wilde-and-plagiarism", "https://publicdomainlibrary.org/en/authors/oscar-wilde" ]
 
 def home(request):
     '''Fund to respond to the "home" request.'''
