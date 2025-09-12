@@ -7,7 +7,7 @@ import random
 #create view here
 
 quotes = ["Be yourself; everyone else is already taken", "Life is too important to be taken seriously", "I can resist everything except temptation"]
-images = ["data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==","https://the-public-domain-review.imgix.net/essays/on-oscar-wilde-and-plagiarism/23565530654_c3ae721476_o.jpg?fit=max&w=1200&h=850&auto=format,compress", "https://publicdomainlibrary.org/uploads/attachments/livhezziviv05628j5rfyihf-oscar-wilde-by-napoleon-sarony-three-quarter-length-photograph-seated.max.webp" ]
+images = ["https://upload.wikimedia.org/wikipedia/commons/6/66/Oscar_Wilde_1882_2.jpg ","https://the-public-domain-review.imgix.net/essays/on-oscar-wilde-and-plagiarism/23565530654_c3ae721476_o.jpg?fit=max&w=1200&h=850&auto=format,compress", "https://publicdomainlibrary.org/uploads/attachments/livhezziviv05628j5rfyihf-oscar-wilde-by-napoleon-sarony-three-quarter-length-photograph-seated.max.webp" ]
 
 def home(request):
     '''Fund to respond to the "home" request.'''
