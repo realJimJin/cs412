@@ -2,9 +2,23 @@
 {% extends 'quotes/base.html' %}
     
     {% block content %}
-    <h1>Hello, world!</h1>
 
-        hello, world!!
+     <h2>All quotes by Oscar Wilde</h2>
+    
+    <ul>
+        
+        {% for quote in quotes %}
+             <li>{{ quote }}</li>
+        {% endfor %}
+        
+    </ul>
+
+    <h2>All images of Oscar Wilde</h2>
+    <ul>
+          {% for url in images %}
+             <img src  = "{{ url }}"/> 
+        {% endfor %}        
+    </ul>
         
     {% endblock %}
         

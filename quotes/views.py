@@ -56,5 +56,7 @@ def show_all(request):
     # a dict of context variables (key-value pairs)
     context = {
         "time": time.ctime(),
+        "images": images,
+        "quotes": quotes,
     }
     return render(request, template_name, context)
