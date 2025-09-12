@@ -58,7 +58,7 @@ TEMPLATES = [
         'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
-            "string_if_invalid": "WARNING: {{%s}} not a valid context variable,
+            "string_if_invalid": "WARNING: {{%s}} not a valid context variable",
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
