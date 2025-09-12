@@ -30,3 +30,23 @@ def about(request):
         "time": time.ctime(),
     }
     return render(request, template_name, context)
+
+def quote(request):
+    '''Respond to the URL 'about', delegate work to a template.'''
+
+    template_name = 'quotes/quote.html'
+    # a dict of context variables (key-value pairs)
+    context = {
+        "time": time.ctime(),
+    }
+    return render(request, template_name, context)
+
+def show_all(request):
+    '''Respond to the URL 'about', delegate work to a template.'''
+
+    template_name = 'quotes/show_all.html'
+    # a dict of context variables (key-value pairs)
+    context = {
+        "time": time.ctime(),
+    }
+    return render(request, template_name, context)
