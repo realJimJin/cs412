@@ -12,8 +12,6 @@ images = ["https://upload.wikimedia.org/wikipedia/commons/6/66/Oscar_Wilde_1882_
 def home(request):
     '''Fun to respond to the "home" request.'''
 
-     '''Respond to the URL '/', delegate work to a template.'''
-
     template_name = 'quotes/quote.html'
     # a dict of context variables (key-value pairs)
     context = {
