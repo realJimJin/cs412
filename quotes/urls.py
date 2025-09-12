@@ -7,5 +7,5 @@ from . import views
 
 urlpatterns = [
  #path(r'', views.home, name="home"),
- path(r'', views.base, name="base"), 
+ path(r'about', views.about, name="about_page"),  
 ]

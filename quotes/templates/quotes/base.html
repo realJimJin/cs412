@@ -1,22 +1,23 @@
+<!-- quotes/templates/quotes/base.html -->
+
+{% load static %}
 <html>
+    <head>
+        <title>Hello, world!</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+        <nav>
+            <li><a href="{% url 'about_page' %}">About</a></li>
+        </nav>
+        
+        <!-- put page specific content here  -->
+         {% block content %}
+         {% endblock %}
 
-  <head>
-   <title> Hello, world!</title>
-  </head>
-
-  <body>
-   <h1> Hello, world!</h1>
-   
-   <p>
-   Lorem ipsum dolor sit, amet consectetur adipisicing elit. 
-   </p>
-
-  <p>
-  Lorem ipsum, dolor sit amet consectetur adipisicing elit. 
-  </p>
-
-</body>
-
+        <footer>
+            The current time is {{time}}.  <br>
+        </footer>
+    </body>
 </html>
-
 

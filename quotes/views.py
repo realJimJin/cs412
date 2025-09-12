@@ -20,3 +20,12 @@ def base(request):
    template_name = 'quotes/base.html'
    return render(request, template_name) 
 
+def about(request):
+    '''Respond to the URL 'about', delegate work to a template.'''
+
+    template_name = 'quotes/about.html'
+    # a dict of context variables (key-value pairs)
+    context = {
+        "time": time.ctime(),
+    }
+    return render(request, template_name, context)
