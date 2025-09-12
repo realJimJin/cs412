@@ -10,15 +10,18 @@ quotes = ["Be yourself; everyone else is already taken", "Life is too important 
 images = ["https://upload.wikimedia.org/wikipedia/commons/6/66/Oscar_Wilde_1882_2.jpg ","https://the-public-domain-review.imgix.net/essays/on-oscar-wilde-and-plagiarism/23565530654_c3ae721476_o.jpg?fit=max&w=1200&h=850&auto=format,compress", "https://publicdomainlibrary.org/uploads/attachments/livhezziviv05628j5rfyihf-oscar-wilde-by-napoleon-sarony-three-quarter-length-photograph-seated.max.webp" ]
 
 def home(request):
-    '''Fund to respond to the "home" request.'''
+    '''Fun to respond to the "home" request.'''
 
-    response_text = '''
-    <html>
-    <h1>Hello, world!</h1>
-    </html> 
-    '''
+     '''Respond to the URL '/', delegate work to a template.'''
 
-    return HttpResponse(response_text) 
+    template_name = 'quotes/quote.html'
+    # a dict of context variables (key-value pairs)
+    context = {
+        "time": time.ctime(),
+        "image_url": images[random.randint(0,2)],
+        "quote": quotes[random.randint(0,2)],
+    }
+    return render(request, template_name, context)
 
 
 def base(request):
