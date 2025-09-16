@@ -5,7 +5,7 @@
 <div>
     <h1>Contact Form</h1>
     
-    <form action="{% url 'submit' %}" method="POST">
+    <form action="{% url 'confirmation' %}" method="POST">
         {% csrf_token %}
         
         Name: <input type="text" name="name">
