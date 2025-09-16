@@ -1,0 +1,32 @@
+<!-- restaurant/templates/restaurant/base.html -->
+
+{% load static %}
+<html>
+    <head>
+        <title>Restaurant</title>
+        <link rel="stylesheet" href="{% static 'styles.css' %}">
+    </head>
+    <body>
+        <div class="grid-container">
+        <header>
+            <h1>Restaurant</h1>
+        </header>
+       </div>
+        <nav>
+            <li><a href="{% url 'main_page' %}">Main</a></li>
+            <li><a href="{% url 'order_page' %}">Order</a></li>
+            <li><a href="{% url 'confirmation_page' %}">Confirmation</a></li>
+        </nav>
+
+        <!-- put page specific content here  -->
+         {% block content %}
+         {% endblock %}
+
+        <footer>
+            The current time is {{time}}.  <br>
+        </footer>
+    </body>
+</html>
+
+~                                                                                                                                                                                                           
+~              
