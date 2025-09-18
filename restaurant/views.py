@@ -58,7 +58,7 @@ def confirmation(request):
             'phone': phone,
             'email': email,
             'time': time.ctime(), 
-            'special_instructions": special_instructions,
+            'special_instructions': special_instructions,
         } 
 
         # delegate the response to the template, provide context variables
