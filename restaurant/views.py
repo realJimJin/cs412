@@ -52,17 +52,23 @@ def confirmation(request):
         burger6 = request.POST.get('burger6', None)
         fries = request.POST.get('fries', None)
         special = request.POST.get('special', None)
+        total = 0
         food = [] 
         if burger4 is not None: 
            food.append("Regular Burger")
+           total += 4
         if burger5 is not None: 
-           food.append("Big Burger") 
+           food.append("Big Burger")
+           total += 5 
         if burger6 is not None: 
            food.append("Very Big Burger")
+           total += 6
         if fries is not None:
-           food.append("Fries") 
+           food.append("Fries")
+           total += 2 
         if special is not None:
-           food.append("Very Burger Sauce") 
+           food.append("Extra Burger Sauce")
+           total += 2  
         
         name = request.POST['name']
         phone = request.POST['phone']
@@ -77,6 +83,7 @@ def confirmation(request):
             'time': time.ctime(), 
             'special_instructions': special_instructions,
             'food': food
+            'total': total 
 
         } 
 
