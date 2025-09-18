@@ -47,11 +47,11 @@ def confirmation(request):
     if request.POST:
 
         # extract form fields into variables:
-        burger4 = request.POST['burger4']
-        burger5 = request.POST['burger5']
-        burger6 = request.POST['burger6']
-        fries = request.POST['fries2'] 
-        special = request.POST['special']
+        burger4 = request.POST.get('burger4', None)
+        burger5 = request.POST.get('burger5', None)
+        burger6 = request.POST.get('burger6', None)
+        fries = request.POST.get('fries', None)
+        special = request.POST.get('special', None)
         food = [] 
         if burger4 is not None: 
            food.append("Regular Burger")
