@@ -1,4 +1,4 @@
-<!-- restaurant/templates/restaurant/order.html -->
+<i-- restaurant/templates/restaurant/order.html -->
 {% extends 'restaurant/base.html' %}
 
 {% block content %}
@@ -7,10 +7,30 @@
     
     <form action="{% url 'confirmation' %}" method="POST">
         {% csrf_token %}
+         <p>
+        <h3>Select your Items:</h3>
+        <div><input type="checkbox" name="felafel4">Regular Felafel $4</div>
+        <div><input type="checkbox" name="felafel5">Big Felafel $5</div>
+        <div><input type="checkbox" name="felafel6">Very Big Felafel $6</div>     
+        <div><input type="checkbox" name="chips">Chips $2</div>    
+        </p>
+
+        <p>
+        <h3>Today's Special:</h3>
+        <div><input type="checkbox" name="special">extra hot sauce</div>
+        </p>
         
+        <p>
+        <h3>Special Instructions</h3>
+        Please share any special instructions:
+        <div><textarea name="special_instructions" rows="3" cols="60"></textarea></div>
+        </p>
+       <p> 
+       <h3>Customer Information</h3> 
         Name: <input type="text" name="name">
         Phone: <input type="text" name="phone">
         Email: <input type="email" name="email"> 
+       </p>
         <input type="submit">
 
     </form>
