@@ -82,8 +82,8 @@ def confirmation(request):
             'email': email,
             'time': time.ctime(), 
             'special_instructions': special_instructions,
-            'food': food
-            'total': total 
+            'food': food,
+            'total': total, 
 
         } 
 
