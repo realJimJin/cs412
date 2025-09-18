@@ -47,6 +47,23 @@ def confirmation(request):
     if request.POST:
 
         # extract form fields into variables:
+        burger4 = request.POST['burger4']
+        burger5 = request.POST['burger5']
+        burger6 = request.POST['burger6']
+        fries = request.POST['fries2'] 
+        special = request.POST['special']
+        food = [] 
+        if burger4 is not None: 
+           food.append("Regular Burger")
+        if burger5 is not None: 
+           food.append("Big Burger") 
+        if burger6 is not None: 
+           food.append("Very Big Burger")
+        if fries is not None:
+           food.append("Fries") 
+        if special is not None:
+           food.append("Very Burger Sauce") 
+        
         name = request.POST['name']
         phone = request.POST['phone']
         email = request.POST['email']
@@ -59,6 +76,8 @@ def confirmation(request):
             'email': email,
             'time': time.ctime(), 
             'special_instructions': special_instructions,
+            'food': food
+
         } 
 
         # delegate the response to the template, provide context variables
