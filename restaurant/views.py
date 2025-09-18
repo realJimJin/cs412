@@ -37,7 +37,7 @@ def order(request):
     return render(request, template_name, context)
 
 
-def submit(request):
+def confirmation(request):
     '''Process the form submission, and generate a result.'''
 
     template_name = "restaurant/confirmation.html"
