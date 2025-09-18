@@ -20,7 +20,11 @@ def home(request):
 def main(request):
    '''main.html'''
    template_name = 'restaurant/main.html'
-   return render(request, template_name)
+   # a dict of context variables (key-value pairs)
+   context = {
+        "time": time.ctime(),
+    }
+   return render(request, template_name, context)
 
 def order(request):
     '''Respond to the URL 'order', delegate work to a template.'''
@@ -32,13 +36,25 @@ def order(request):
     } 
     return render(request, template_name, context)
 
-def confirmation(request):
-    '''Respond to the URL 'confirmation', delegate work to a template.'''
 
-    template_name = 'restaurant/confirmation.html'
-    # a dict of context variables (key-value pairs)
-    context = {
-        "time": time.ctime(),
-    }
-    
-    return render(request, template_name, context)
+def submit(request):
+    '''Process the form submission, and generate a result.'''
+
+    template_name = "restaurant/confirmation.html"
+    print(request.POST)
+
+    # check if POST data was sent with the HTTP POST message:
+    if request.POST:
+
+        # extract form fields into variables:
+        name = request.POST['name']
+        #favorite_color = request.POST['favorite_color']
+
+        # create context variables for use in the template
+        context = {
+            'name': name,
+           #'favorite_color': favorite_color,
+        } 
+
+        # delegate the response to the template, provide context variables
+        return render(request, template_name=template_name, context=context)
