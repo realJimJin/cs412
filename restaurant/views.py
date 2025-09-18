@@ -48,12 +48,14 @@ def confirmation(request):
 
         # extract form fields into variables:
         name = request.POST['name']
-        #favorite_color = request.POST['favorite_color']
+        phone = request.POST['phone']
+        email = request.POST['email'] 
 
         # create context variables for use in the template
         context = {
             'name': name,
-           #'favorite_color': favorite_color,
+            'phone': phone,
+            'email': email,
         } 
 
         # delegate the response to the template, provide context variables
