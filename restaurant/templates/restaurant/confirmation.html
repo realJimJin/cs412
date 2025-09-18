@@ -3,16 +3,36 @@
 
 {% block content %}
 <div>
-    <h1>Confirmation Page</h1>
-
-    <p>
-        Hi, {{name}}!
+    <h2>Confirmation</h2>
+    Thank you for your order!
+    <h4>Your order will be ready at: {{time}}.</h4>    
     </p>
 
     <p>
-        You said your phone was {{phone}}.
-        You said your email was {{email}}. 
+    <h3>Your order is confirmed:</h3>
+    
+    <ul>
+    
+        <li>burger</li>
+    
+        <li>burger4</li>
+    
+    
+    
+    <h3>Special Instructions: </h3>
+    {{special_instructions}}
     </p>
-  
+    
+
+    <p>
+    <h4>Total: $ 8</h4>
+    </p>
+
+    <p>
+    <h3>Customer Information:</h3>
+    <div>{{name}}</div>
+    <div>{{phone}}</div>
+    <div>{{email}}</div>
+    </p>
 </div>
 {% endblock %}
