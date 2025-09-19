@@ -3,6 +3,7 @@ from django.http import HttpRequest, HttpResponse
 
 import time
 import random
+from datetime import datetime, timedelta
 
 #create view here
 
@@ -73,14 +74,25 @@ def confirmation(request):
         name = request.POST['name']
         phone = request.POST['phone']
         email = request.POST['email']
-        special_instructions = request.POST['special_instructions']  
+        special_instructions = request.POST['special_instructions']
+
+        ctime_string = time.ctime() 
+    
+        # Define the format string matching ctime()'s output
+        format_string = "%a %b %d %H:%M:%S %Y"
+    
+        # Convert the ctime string to a datetime object
+        dt_object = datetime.strptime(ctime_string, format_string)
+
+        time_to_add = timedelta(hours=0, minutes=random.randint(30, 45))
+        new_dt_object = dt_object + time_to_add  
 
         # create context variables for use in the template
         context = {
             'name': name,
             'phone': phone,
             'email': email,
-            'time': time.ctime(), 
+            'time': new_dt_object, 
             'special_instructions': special_instructions,
             'food': food,
             'total': total, 
