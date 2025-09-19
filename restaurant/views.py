@@ -84,7 +84,7 @@ def confirmation(request):
         # Convert the ctime string to a datetime object
         dt_object = datetime.strptime(ctime_string, format_string)
 
-        time_to_add = timedelta(hours=0, minutes=random.randint(30, 45))
+        time_to_add = timedelta(hours=1, minutes=random.randint(30, 45))
         new_dt_object = dt_object + time_to_add  
 
         # create context variables for use in the template
@@ -92,7 +92,8 @@ def confirmation(request):
             'name': name,
             'phone': phone,
             'email': email,
-            'time': new_dt_object, 
+            'time': time.ctime(),
+            'food_time': new_dt_object, 
             'special_instructions': special_instructions,
             'food': food,
             'total': total, 
