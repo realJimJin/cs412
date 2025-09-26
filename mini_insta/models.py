@@ -2,8 +2,7 @@ from django.db import models
 
 # Create your models here.
 
-# Create your models here.
-class (models.Model):
+class Profile (models.Model):
     '''Encapsulate the data of a user profile on mini_insta.'''
 
     # define the data attributes of the Article object
@@ -13,7 +12,7 @@ class (models.Model):
     join_date = models.DateTimeField(auto_now=True)
     profile_image_url = models.URLField(blank=True) # url as a string
     #user = models.ForeignKey(User, on_delete=models.CASCADE) 
- def __str__(self):
+    def __str__(self):
         '''return a string representation of this model instance.'''
         return f'{self.username} displays as {self.display_name}'
     
