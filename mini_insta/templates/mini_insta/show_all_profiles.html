@@ -4,33 +4,22 @@
 {% block content %}
 <h1>Showing all profiles</h1>
 
-<!-- this displays the QuerySet of all profiles. -->
-<!-- {{profiles}} -->
+<main class="grid profile-grid">
+  {% for profile in profiles %}
+    <div class="profile-item">
+      {% if profile.profile_image_url %}
+        <img src="{{ profile.profile_image_url }}" alt="{{ profile.display_name }}">
+      {% endif %}
 
-<main class="grid-container">
-    <!-- scriptlet code for a for loop -->
-    {% for profile in profiles %}
-    <profile>
-        <div>
-            <h2>{{profile.username}}</h2>
-            <h3>by {{profile.display_name}}</h3>
-            <p>
-                {{profile.bio_text}}
-            </p>
-        </div>
-        
-      
-        <!-- <img src="{{profile.profile_image_url}}" alt=""> -->
-        {% if profile.profile_image_url %}
-        <img src="{{profile.profile_image_url}}" alt="">
-        {% else %}
-        No image
-        {% endif %}
-        
-        
-    </profile>
-    <hr>
-
-    {% endfor %}
+      <div class="profile-header-item" style="padding: .5rem;">
+        <h2>{{ profile.username }}</h2>
+        <h3>by {{ profile.display_name }}</h3>
+        <p>{{ profile.bio_text }}</p>
+        <small>Joined: {{ profile.join_date }}</small>
+      </div>
+    </div>
+  {% empty %}
+    <p>No profiles yet.</p>
+  {% endfor %}
 </main>
 {% endblock %}
