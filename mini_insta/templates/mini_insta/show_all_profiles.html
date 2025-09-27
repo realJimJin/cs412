@@ -6,10 +6,14 @@
 
 <main class="grid profile-grid">
   {% for profile in profiles %}
-    <div class="profile-item">
-      {% if profile.profile_image_url %}
-        <img src="{{ profile.profile_image_url }}" alt="{{ profile.display_name }}">
-      {% endif %}
+     <!-- clickable image linking to detail page -->
+      <a href="{% url 'mini_insta:show_profile' profile.pk %}">
+        {% if profile.profile_image_url %}
+          <img src="{{ profile.profile_image_url }}" alt="{{ profile.display_name }}">
+        {% else %}
+          <img src="https://via.placeholder.com/200" alt="No image">
+        {% endif %}
+      </a>
 
       <div class="profile-header-item" style="padding: .5rem;">
         <h2>{{ profile.username }}</h2>
