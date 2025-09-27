@@ -12,7 +12,7 @@ class ProfileListView(ListView):
     context_object_name = "profiles"
 
 
-class ProfileView(DetailView):
+class ProfileDetailView(DetailView):
     '''Display a single profile.'''
 
     model = Profile
