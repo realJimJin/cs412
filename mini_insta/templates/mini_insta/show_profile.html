@@ -1,0 +1,32 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<main class="grid profile-header">
+
+  <!-- Profile image -->
+  <div class="profile-image">
+    {% if profile.profile_image_url %}
+      <img src="{{ profile.profile_image_url }}" alt="{{ profile.display_name }}">
+    {% else %}
+      <img src="https://via.placeholder.com/200" alt="No image">
+    {% endif %}
+  </div>
+
+  <!-- Profile info -->
+  <div class="profile-info">
+    <div class="profile-header-item">
+      <h2>{{ profile.display_name }}</h2>
+      <h3>@{{ profile.username }}</h3>
+    </div>
+
+    <div class="profile-header-item">
+      <p>{{ profile.bio_text }}</p>
+    </div>
+
+    <div class="profile-header-item">
+      <small>Joined: {{ profile.join_date }}</small>
+    </div>
+  </div>
+
+</main>
+{% endblock %}
