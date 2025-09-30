@@ -27,4 +27,17 @@ class Post(models.Model):
 
     def __str__(self):
         '''Return a string representation of this Post.'''
+        return f'{self.caption}'
+
+
+class Photo(models.Model):
+    '''Encapsulate the idea of a Photo about a Post'''
+
+    # data attributes for the Photo:
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    caption = models.TextField(blank=False)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        '''Return a string representation of this Photo.'''
         return f'{self.caption}'    
