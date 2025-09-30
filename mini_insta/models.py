@@ -15,4 +15,16 @@ class Profile (models.Model):
     def __str__(self):
         '''return a string representation of this model instance.'''
         return f'{self.username} displays as {self.display_name}'
-    
+
+
+class Post(models.Model):
+    '''Encapsulate the idea of a Post about a Profile'''
+
+    # data attributes for the Post:
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    caption = models.TextField(blank=False)
+    timestamp = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        '''Return a string representation of this Post.'''
+        return f'{self.caption}'    
