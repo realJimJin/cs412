@@ -28,5 +28,20 @@
     </div>
   </div>
 
+  <div>
+        <h2>Posts</h2>
+        <!-- Display the posts about this profile -->
+        <!-- {{profile.get_all_posts}} -->
+        {% for post in profile.get_all_posts %}
+            <div>
+                <strong>by {{profile.display_name}} at {{post.published}}</strong>
+                <p>
+                    {{post.caption}}
+                    <br>
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
 </main>
 {% endblock %}
