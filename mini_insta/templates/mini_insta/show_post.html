@@ -1,0 +1,42 @@
+{% extends 'mini_insta/base.html' %}
+
+{% block content %}
+<main class="grid profile-header">
+
+  <!-- Profile image -->
+  <div class="profile-image">
+    {% if profile.profile_image_url %}
+      <img src="{{ profile.profile_image_url }}" alt="{{ profile.display_name }}">
+    {% else %}
+      <img src="https://via.placeholder.com/200" alt="No image">
+    {% endif %}
+  </div>
+
+  <!-- Profile info -->
+  <div class="profile-info">
+    <div class="profile-header-item">
+      <h2>{{ profile.display_name }}</h2>
+    </div>
+
+    <div class="profile-header-item">
+      <p>{{ post.caption }}</p>
+    </div>
+
+    <div class="profile-header-item">
+      <small>Posted: {{ post.timestamp }}</small>
+    </div>
+  </div>
+
+  <div>
+        <h2>Photos</h2>
+        <!-- Display the photos about this post -->
+        <!-- {{post.get_all_photos}} -->
+        {% for photo in posts.get_all_photos %}
+            <div>
+               <img src = {{photo.image_url}} /> 
+            </div>
+        {% endfor %}
+    </div>
+
+</main>
+{% endblock %}
