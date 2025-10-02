@@ -29,7 +29,7 @@ class Post(models.Model):
     caption = models.TextField(blank=False)
     timestamp = models.DateTimeField(auto_now=True)
 
-    def get_all_posts(self):
+    def get_all_photos(self):
         '''Return a QuerySet of photos about this post.'''
         # use the object manager to retrieve photos about this post
         photos = Photo.objects.filter(post=self)
