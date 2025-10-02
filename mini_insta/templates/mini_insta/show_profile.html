@@ -34,7 +34,7 @@
         <!-- {{profile.get_all_posts}} -->
         {% for post in profile.get_all_posts %}
             <div>
-               <img src = {{post.get_all_photos[0].image_url}} /> 
+               <img src = {{post.get_all_photos.0.image_url}} /> 
             </div>
         {% endfor %}
     </div>
