@@ -20,4 +20,9 @@ class ProfileDetailView(DetailView):
     context_object_name = "profile" # note singular variable name
 
 
- 
+class PostDetailView(DetailView):
+    '''Display a single profile.'''
+
+    model = Post
+    template_name = "mini_insta/show_post.html"
+    context_object_name = "post" # note singular variable name 
