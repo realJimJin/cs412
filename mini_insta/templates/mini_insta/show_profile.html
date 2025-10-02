@@ -34,11 +34,7 @@
         <!-- {{profile.get_all_posts}} -->
         {% for post in profile.get_all_posts %}
             <div>
-                <strong>by {{profile.display_name}} at {{post.timestamp}}</strong>
-                <p>
-                    {{post.caption}}
-                    <br>
-                </p>
+               <img src = {{post.get_all_photos[0].image_url}} /> 
             </div>
         {% endfor %}
     </div>
