@@ -15,7 +15,11 @@ class Profile (models.Model):
     def __str__(self):
         '''return a string representation of this model instance.'''
         return f'{self.username} displays as {self.display_name}'
-
+    def get_all_posts(self):
+        '''Return a QuerySet of posts about this article.'''
+        # use the object manager to retrieve posts about this profile
+        posts = Post.objects.filter(profile=self)
+        return posts
 
 class Post(models.Model):
     '''Encapsulate the idea of a Post about a Profile'''
@@ -24,6 +28,12 @@ class Post(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     caption = models.TextField(blank=False)
     timestamp = models.DateTimeField(auto_now=True)
+
+    def get_all_posts(self):
+        '''Return a QuerySet of photos about this post.'''
+        # use the object manager to retrieve photos about this post
+        photos = Photo.objects.filter(post=self)
+        return photos
 
     def __str__(self):
         '''Return a string representation of this Post.'''
