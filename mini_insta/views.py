@@ -1,6 +1,6 @@
 
 from django.shortcuts import render
-from .models import Profile 
+from .models import Profile, Post, Photo 
 from django.views.generic import ListView, DetailView
 
 # Create your views here.
