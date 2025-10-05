@@ -18,10 +18,9 @@
   <div>
         <h2>Photos</h2>
         <!-- Display the photos about this post -->
-        <!-- {{post.get_all_photos}} -->
         {% for photo in posts.get_all_photos %}
             <div>
-               <img src = {{photo.image_url}} /> 
+               <img src = {{post.get_all_photos.0.image_url}} /> 
             </div>
         {% endfor %}
     </div>
