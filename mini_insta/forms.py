@@ -10,4 +10,4 @@ class CreatePostForm(forms.ModelForm):
     class Meta:
         '''associate this form with a model from our database.'''
         model = Post
-        fields = ['profile', 'caption', 'time_stamp']
+        fields = ['profile', 'caption', 'timestamp']
