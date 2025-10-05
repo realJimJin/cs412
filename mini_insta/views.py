@@ -74,6 +74,10 @@ class CreatePostView(CreateView):
         profile = Profile.objects.get(pk=pk)
         # attach this profile to the post
         form.instance.profile = profile # set the FK
+  
+        # create the related Photo
+        image_url = form.cleaned_data["image_url"]
+        Photo.objects.create(post=post, image_url=image_url)
 
         # delegate the work to the superclass method form_valid:
         return super().form_valid(form)
