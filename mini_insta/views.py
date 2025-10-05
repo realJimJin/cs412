@@ -59,4 +59,22 @@ class CreatePostView(CreateView):
 
         # add this profile into the context dictionary:
         context['profile'] = profile
-        return context 
+        return context
+
+    def form_valid(self, form):
+        '''This method handles the form submission and saves the 
+        new object to the Django database.
+        We need to add the foreign key (of the Profile) to the Post
+        object before saving it to the database.
+        '''
+
+        print(form.cleaned_data)
+        # retrieve the PK from the URL pattern
+        pk = self.kwargs['pk']
+        profile = Profile.objects.get(pk=pk)
+        # attach this profile to the post
+        form.instance.profile = profile # set the FK
+
+        # delegate the work to the superclass method form_valid:
+        return super().form_valid(form)
+         
