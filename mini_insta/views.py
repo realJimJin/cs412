@@ -87,6 +87,6 @@ class CreatePostView(CreateView):
         # delegate the work to the superclass method form_valid:
         return super().form_valid(form)
       
-     def get_success_url(self):
+    def get_success_url(self):
         # Redirect to the detail page of the *post* just created
         return reverse("mini_insta:show_post", kwargs={"pk": self.object.pk})   
