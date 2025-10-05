@@ -2,6 +2,8 @@
 from django.shortcuts import render
 from .models import Profile, Post, Photo 
 from django.views.generic import ListView, DetailView, CreateView
+from .forms import CreatePostForm
+from django.urls import reverse
 
 # Create your views here.
 class ProfileListView(ListView):
