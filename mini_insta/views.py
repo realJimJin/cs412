@@ -44,7 +44,7 @@ class CreatePostView(CreateView):
         # retrieve the PK from the URL pattern
         pk = self.kwargs['pk']
         # call reverse to generate the URL for this Article
-        return reverse('profile', kwargs={'pk':pk})
+        return reverse('show_profile', kwargs={'pk':pk})
 
     def get_context_data(self):
         '''Return the dictionary of context variables for use in the template.'''
