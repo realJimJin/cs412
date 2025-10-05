@@ -13,6 +13,11 @@
 <footer>
     <hr>
     <a href="{% url 'mini_insta:show_all_profiles' %}">← Back to All Profiles</a>
+
+ {# Show Create Post link only if profile is available in context #}
+      {% if profile %}
+        | <a href="{% url 'mini_insta:create_post' profile.pk %}">+ Create Post</a>
+      {% endif %}
   </footer>
     </body>
 
