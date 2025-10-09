@@ -45,8 +45,15 @@ class Photo(models.Model):
 
     # data attributes for the Photo:
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    image_file = models.ImageField(blank=True) # an actual image
     image_url = models.TextField(blank=False)
     timestamp = models.DateTimeField(auto_now=True)
+
+    def get_image_url(self):
+	'''Return the url of the image_file or image_url if there is one'''
+	if image_url is not null: 
+	   return image_url 
+        return image_file.url 
 
     def __str__(self):
         '''Return a string representation of this Photo.'''
