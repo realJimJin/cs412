@@ -29,3 +29,10 @@ class UpdateProfileForm(forms.ModelForm):
             "bio_text": "Bio",
             "profile_image_url": "Profile image URL",
         }
+
+
+class UpdatePostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ["caption"]
+        labels = {"caption": "Caption"}
