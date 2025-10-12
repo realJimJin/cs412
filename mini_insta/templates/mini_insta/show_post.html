@@ -28,5 +28,9 @@
         {% endfor %}
     </div>
 
+<p style="margin-top:1rem;">
+  <a href="{% url 'mini_insta:update_post' post.pk %}" class="button">Update</a>
+  <a href="{% url 'mini_insta:delete_post' post.pk %}" class="button" style="margin-left:.5rem;">Delete</a>
+</p>
 </main>
 {% endblock %}
