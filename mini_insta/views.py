@@ -1,5 +1,6 @@
 
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render, redirect
 from .models import Profile, Post, Photo 
 from django.views.generic import ListView, DetailView, CreateView
 from .forms import CreatePostForm, PhotoForm 
