@@ -12,3 +12,8 @@ class CreatePostForm(forms.ModelForm):
         '''associate this form with a model from our database.'''
         model = Post
         fields = ['caption']
+
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Photo
+        fields = ['image_file']   # upload only
