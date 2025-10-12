@@ -2,12 +2,10 @@
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Profile, Post, Photo 
-from django.views.generic import ListView, DetailView, CreateView
-from .forms import CreatePostForm, PhotoForm 
-from django.urls import reverse
-from django.views.generic import UpdateView
-from .forms import UpdateProfileForm
-from .models import Profile
+from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from .forms import CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm 
+from django.urls import reverse, reverse_lazy
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -88,3 +86,36 @@ class UpdateProfileView(UpdateView):
     form_class = UpdateProfileForm
     template_name = "mini_insta/update_profile_form.html"
     # No need to define get_success_url if Profile.get_absolute_url() exists
+
+
+class DeletePostView(DeleteView):
+    model = Post
+    template_name = "mini_insta/delete_post_form.html"
+    context_object_name = "post"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        post = self.get_object()
+        ctx["post"] = post
+        ctx["profile"] = post.profile
+        return ctx
+
+    def get_success_url(self):
+        post = self.get_object()
+        return reverse("mini_insta:show_profile", kwargs={"pk": post.profile.pk})
+
+
+class UpdatePostView(UpdateView):
+    model = Post
+    form_class = UpdatePostForm
+    template_name = "mini_insta/update_post_form.html"
+    context_object_name = "post"
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["profile"] = self.get_object().profile
+        return ctx
+
+    def get_success_url(self):
+        post = self.get_object()
+        return reverse("mini_insta:show_post", kwargs={"pk": post.pk})
