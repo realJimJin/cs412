@@ -17,3 +17,15 @@ class PhotoForm(forms.ModelForm):
     class Meta:
         model = Photo
         fields = ['image_file']   # upload only
+
+
+class UpdateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        # All editable fields EXCEPT username and join_date
+        fields = ["display_name", "bio_text", "profile_image_url"]
+        labels = {
+            "display_name": "Display name",
+            "bio_text": "Bio",
+            "profile_image_url": "Profile image URL",
+        }
