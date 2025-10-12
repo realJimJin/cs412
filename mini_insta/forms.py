@@ -2,7 +2,7 @@
 # define the forms that we use for create/update/delete operations
 
 from django import forms
-from .models import Profile, Post
+from .models import Profile, Post, Photo 
 
 class CreatePostForm(forms.ModelForm):
     '''A form to add a post to the database.'''
