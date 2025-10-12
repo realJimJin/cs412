@@ -20,7 +20,10 @@
         <!-- Display the photos about this post -->
         {% for photo in post.get_all_photos %}
             <div>
-               <img src = "{{photo.get_image_url}}" /> 
+               <img src = "{{photo.get_image_url}}" />
+               <p style="font-size:12px;color:#888">
+  raw: {{ photo.image_file.name }} | url: {{ photo.get_image_url }}
+</p> 
             </div>
         {% endfor %}
     </div>
