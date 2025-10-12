@@ -50,10 +50,16 @@ class Photo(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
 
     def get_image_url(self):
-        '''Return the url of the image_file or image_url if there is one'''
-        if self.image_url is not None:
-            return self.image_url 
-        return self.image_file.url 
+        # Prefer uploaded file
+        if self.image_file:
+            try:
+                return self.image_file.url
+            except Exception:
+                pass
+        # Fallback to stored URL only if non-empty
+        if self.image_url:
+            return self.image_url
+        return ""   # nothing available 
 
     def __str__(self):
         '''Return a string representation of this Photo.'''
