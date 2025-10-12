@@ -5,6 +5,10 @@ from .models import Profile, Post, Photo
 from django.views.generic import ListView, DetailView, CreateView
 from .forms import CreatePostForm, PhotoForm 
 from django.urls import reverse
+from django.views.generic import UpdateView
+from .forms import UpdateProfileForm
+from .models import Profile
+
 
 # Create your views here.
 class ProfileListView(ListView):
