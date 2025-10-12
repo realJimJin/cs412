@@ -29,22 +29,23 @@
   </div>
 
   <div>
-        <h2>Posts</h2>
-        <!-- Display the posts about this profile -->
-        <!-- {{profile.get_all_posts}} -->
-        {% for post in profile.get_all_posts %}
-           
-             <!-- clickable image linking to detail page -->
+    <h2>Posts</h2>
+    {% for post in profile.get_all_posts %}
       <a href="{% url 'mini_insta:show_post' post.pk %}">
-        {% if post.get_all_photos.0.image_url %}
-          <img src="{{ post.get_all_photos.0.image_url }}" alt="{{ post.caption }}">
-        {% else %}
-          <img src="https://via.placeholder.com/200" alt="No image">
-        {% endif %}
+        {% with photo=post.get_all_photos.0 %}
+          {% if photo and photo.get_image_url %}
+            <img src="{{ photo.get_image_url }}" alt="{{ post.caption }}">
+          {% elif post.get_image_url %}
+            <img src="{{ post.get_image_url }}" alt="{{ post.caption }}">
+          {% else %}
+            <img src="https://via.placeholder.com/200" alt="No image">
+          {% endif %}
+        {% endwith %}
       </a>
-            
-        {% endfor %}
-    </div>
+    {% empty %}
+      <p>No posts yet.</p>
+    {% endfor %}
+  </div>
 
 </main>
 {% endblock %}
