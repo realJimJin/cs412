@@ -2,7 +2,7 @@
 from django.shortcuts import render
 from .models import Profile, Post, Photo 
 from django.views.generic import ListView, DetailView, CreateView
-from .forms import CreatePostForm
+from .forms import CreatePostForm, PhotoForm 
 from django.urls import reverse
 
 # Create your views here.
@@ -62,7 +62,7 @@ class CreatePostView(CreateView):
         return context
 
     def form_valid(self, form):
-        '''This method handles the form submission and saves the 
+        '''This method handles the form submission and saves the
         new object to the Django database.
         We need to add the foreign key (of the Profile) to the Post
         object before saving it to the database.
@@ -86,7 +86,4 @@ class CreatePostView(CreateView):
 
         # delegate the work to the superclass method form_valid:
         return super().form_valid(form)
-      
-    def get_success_url(self):
-        # Redirect to the detail page of the *post* just created
-        return reverse("mini_insta:show_post", kwargs={"pk": self.object.pk})   
+   
