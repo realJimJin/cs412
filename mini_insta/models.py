@@ -21,7 +21,7 @@ class Profile (models.Model):
         # use the object manager to retrieve posts about this profile
         posts = Post.objects.filter(profile=self)
         return posts
-   def get_absolute_url(self):
+    def get_absolute_url(self):
         # Redirect back to this profile’s page after successful update
         return reverse("mini_insta:show_profile", kwargs={"pk": self.pk})
 
