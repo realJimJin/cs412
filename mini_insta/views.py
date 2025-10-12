@@ -30,60 +30,51 @@ class PostDetailView(DetailView):
     context_object_name = "post" # note singular variable name
 
 
-class CreatePostView(CreateView):
-    '''A view to handle creation of a new Post on a profile.'''
 
+class CreatePostView(CreateView):
     form_class = CreatePostForm
     template_name = "mini_insta/create_post_form.html"
 
     def get_success_url(self):
-        '''Provide a URL to redirect to after creating a new Post.'''
+        return reverse('mini_insta:show_profile', kwargs={'pk': self.kwargs['pk']})
 
-        # create and return a URL:
-        # return reverse('show_all') # not ideal; we will return to this
-        # retrieve the PK from the URL pattern
-        pk = self.kwargs['pk']
-        # call reverse to generate the URL for this Article
-        return reverse('mini_insta:show_profile', kwargs={'pk':pk})
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
+        ctx['profile'] = profile
+        # provide photo_form in both GET and POST
+        if self.request.method == "POST":
+            ctx['photo_form'] = PhotoForm(self.request.POST, self.request.FILES)
+        else:
+            ctx['photo_form'] = PhotoForm()
+        return ctx
 
-    def get_context_data(self):
-        '''Return the dictionary of context variables for use in the template.'''
+    def post(self, request, *args, **kwargs):
+        """Process both the Post form and the Photo form together."""
+        self.object = None
+        profile = get_object_or_404(Profile, pk=self.kwargs['pk'])
 
-        # calling the superclass method
-        context = super().get_context_data()
+        form = self.get_form()  # CreatePostForm bound to POST
+        photo_form = PhotoForm(request.POST, request.FILES)
 
-        # find/add the profile to the context data
-        # retrieve the PK from the URL pattern
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
+        if form.is_valid() and photo_form.is_valid():
+            # Save Post
+            post = form.save(commit=False)
+            post.profile = profile
+            post.save()
 
-        # add this profile into the context dictionary:
-        context['profile'] = profile
-        return context
+            # Save Photo only if a file was provided
+            if photo_form.cleaned_data.get('image_file'):
+                photo = photo_form.save(commit=False)
+                photo.post = post
+                photo.save()
 
-    def form_valid(self, form):
-        '''This method handles the form submission and saves the
-        new object to the Django database.
-        We need to add the foreign key (of the Profile) to the Post
-        object before saving it to the database.
-        '''
+            return redirect(self.get_success_url())
 
-        print(form.cleaned_data)
-        # retrieve the PK from the URL pattern
-        pk = self.kwargs['pk']
-        profile = Profile.objects.get(pk=pk)
-        # attach this profile to the post
-        form.instance.profile = profile # set the FK
-
-        # create the Post but don’t commit yet
-        self.object = form.save(commit=False)
-        self.object.profile = profile
-        self.object.save()
-
-       # now create the related Photo
-        image_url = form.cleaned_data["image_url"]
-        Photo.objects.create(post=self.object, image_url=image_url)
-
-        # delegate the work to the superclass method form_valid:
-        return super().form_valid(form)
+        # Re-render with errors and the missing context vars
+        return render(request, self.template_name, {
+            'form': form,
+            'photo_form': photo_form,
+            'profile': profile,
+        })
    
