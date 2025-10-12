@@ -83,3 +83,8 @@ class CreatePostView(CreateView):
             'profile': profile,
         })
    
+class UpdateProfileView(UpdateView):
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = "mini_insta/update_profile_form.html"
+    # No need to define get_success_url if Profile.get_absolute_url() exists
