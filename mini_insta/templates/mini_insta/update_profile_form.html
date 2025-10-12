@@ -1,0 +1,32 @@
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+<h1>Update Profile: {{ object.display_name }}</h1>
+
+<form method="POST">
+  {% csrf_token %}
+
+  <div class="field">
+    <label for="{{ form.display_name.id_for_label }}">Display name</label>
+    {{ form.display_name }}
+    {{ form.display_name.errors }}
+  </div>
+
+  <div class="field">
+    <label for="{{ form.bio_text.id_for_label }}">Bio</label>
+    {{ form.bio_text }}
+    {{ form.bio_text.errors }}
+  </div>
+
+  <div class="field">
+    <label for="{{ form.profile_image_url.id_for_label }}">Profile image URL</label>
+    {{ form.profile_image_url }}
+    {{ form.profile_image_url.errors }}
+  </div>
+
+  <div class="actions" style="margin-top:1rem;">
+    <button type="submit">Save changes</button>
+    <a href="{% url 'mini_insta:show_profile' object.pk %}" class="button">Cancel</a>
+  </div>
+</form>
+{% endblock %}
