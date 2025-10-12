@@ -41,26 +41,29 @@ class Post(models.Model):
 
 
 class Photo(models.Model):
-    '''Encapsulate the idea of a Photo about a Post'''
+    """Encapsulate the idea of a Photo about a Post"""
 
-    # data attributes for the Photo:
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    image_file = models.ImageField(blank=True) # an actual image
+    image_file = models.ImageField(upload_to='photos/', blank=True)
     image_url = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)
 
     def get_image_url(self):
-        # Prefer uploaded file
-        if self.image_file:
+        """
+        Prefer uploaded file if present; otherwise fall back to the image_url.
+        """
+        f = self.image_file
+        if f and getattr(f, "name", ""):
             try:
-                return self.image_file.url
+                if f.storage.exists(f.name):
+                    return f.url
             except Exception:
                 pass
-        # Fallback to stored URL only if non-empty
-        if self.image_url:
-            return self.image_url
-        return ""   # nothing available 
+
+        if self.image_url and self.image_url.strip():
+            return self.image_url.strip()
+
+        return None
 
     def __str__(self):
-        '''Return a string representation of this Photo.'''
         return f'{self.get_image_url()}'    
