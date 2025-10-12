@@ -46,7 +46,7 @@ class Photo(models.Model):
     # data attributes for the Photo:
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     image_file = models.ImageField(blank=True) # an actual image
-    image_url = models.TextField(blank=False)
+    image_url = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)
 
     def get_image_url(self):
