@@ -140,3 +140,10 @@ CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
 if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
     STATIC_URL = '/gjin/static/'
     MEDIA_URL = '/gjin/media/'
+
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DEBUG = True
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
