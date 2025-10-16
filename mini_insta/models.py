@@ -58,10 +58,9 @@ class Photo(models.Model):
         """
         f = self.image_file
         if self.image_url:
-            try:
-                return self.image_url
+            return self.image_url
 
-        return self.image_file.url()
+        return self.image_file.url
 
 
     def __str__(self):
