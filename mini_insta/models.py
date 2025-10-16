@@ -48,7 +48,7 @@ class Photo(models.Model):
     """Encapsulate the idea of a Photo about a Post"""
 
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    image_file = models.ImageField(upload_to='photos/', blank=True)
+    image_file = models.ImageField(blank=True)
     image_url = models.TextField(blank=True)
     timestamp = models.DateTimeField(auto_now=True)
 
@@ -56,7 +56,6 @@ class Photo(models.Model):
         """
         Prefer uploaded file if present; otherwise fall back to the image_url.
         """
-        f = self.image_file
         if self.image_url:
             return self.image_url
 
