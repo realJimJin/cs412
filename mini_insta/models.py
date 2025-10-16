@@ -57,17 +57,12 @@ class Photo(models.Model):
         Prefer uploaded file if present; otherwise fall back to the image_url.
         """
         f = self.image_file
-        if f and getattr(f, "name", ""):
+        if self.image_url:
             try:
-                if f.storage.exists(f.name):
-                    return f.url
-            except Exception:
-                pass
+                return self.image_url
 
-        if self.image_url and self.image_url.strip():
-            return self.image_url.strip()
+        return self.image_file.url()
 
-        return None
 
     def __str__(self):
         return f'{self.get_image_url()}'
