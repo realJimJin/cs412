@@ -66,6 +66,10 @@ class Post(models.Model):
         photos = Photo.objects.filter(post=self)
         return photos
 
+   def get_all_comments(self):
+    """Return all comments for this post (newest first)."""
+    return Comment.objects.filter(post=self).select_related("profile").order_by("-timestamp")
+
     def __str__(self):
         '''Return a string representation of this Post.'''
         return f'{self.caption}'
