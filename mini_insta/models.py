@@ -102,4 +102,15 @@ class Follow(models.Model):
     timestamp=  models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.timestamp}'           
+        return f'{self.timestamp}'
+
+class Comment(models.Model):
+    """A comment made by a Profile on a Post."""
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="comments")
+    text = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        preview = (self.text[:40] + "…") if len(self.text) > 40 else self.text
+        return f"@{self.profile.username} on Post#{self.post.pk} — {preview}"           
