@@ -70,8 +70,8 @@ class Follow(models.Model):
     '''Encapsulates the idea of a Follow between one profile and another'''
 
     #data attributes for the Follow:
-    profile= models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile', null = True)
-    follower_profile=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='follower_profile', null = True)
+    profile= models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='profile')
+    follower_profile=models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='follower_profile')
     timestamp=  models.DateTimeField(auto_now=True)
 
     def __str__(self):
