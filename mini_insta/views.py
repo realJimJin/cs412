@@ -119,3 +119,15 @@ class UpdatePostView(UpdateView):
     def get_success_url(self):
         post = self.get_object()
         return reverse("mini_insta:show_post", kwargs={"pk": post.pk})
+
+class ShowFollowersDetailView(DetailView):
+    """Display a Profile and the list of Profiles who follow it."""
+    model = Profile
+    template_name = "mini_insta/show_followers.html"
+    context_object_name = "profile"  # template gets `profile`
+
+class ShowFollowingDetailView(DetailView):
+    """Display a Profile and the list of Profiles this Profile follows."""
+    model = Profile
+    template_name = "mini_insta/show_following.html"
+    context_object_name = "profile"
