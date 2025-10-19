@@ -1,0 +1,19 @@
+{% extends 'mini_insta/base.html' %}
+{% block content %}
+<h2>Followers of {{ profile.display_name }}</h2>
+<p>Total: {{ profile.get_num_followers }}</p>
+
+<ul>
+  {% for p in profile.get_followers %}
+    <li>
+      <a href="{% url 'mini_insta:show_profile' p.pk %}">
+        {{ p.display_name }} (@{{ p.username }})
+      </a>
+    </li>
+  {% empty %}
+    <li>No followers yet.</li>
+  {% endfor %}
+</ul>
+
+<p><a href="{% url 'mini_insta:show_profile' profile.pk %}">← Back to profile</a></p>
+{% endblock %}

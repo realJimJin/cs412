@@ -20,6 +20,17 @@
     </div>
 
     <div class="profile-header-item">
+  <strong>
+    <a href="{% url 'mini_insta:show_followers' profile.pk %}">
+      {{ profile.get_num_followers }}
+    </a> Followers ·
+    <a href="{% url 'mini_insta:show_following' profile.pk %}">
+      {{ profile.get_num_following }}
+    </a> Following
+  </strong>
+</div>
+
+    <div class="profile-header-item">
       <p>{{ profile.bio_text }}</p>
     </div>
 
