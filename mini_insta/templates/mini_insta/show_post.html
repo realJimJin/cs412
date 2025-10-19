@@ -28,6 +28,28 @@
         {% endfor %}
     </div>
 
+<h3>Comments</h3>
+
+{% with comments=post.get_all_comments %}
+  {% if comments %}
+    <ul>
+      {% for c in comments %}
+        <li>
+          <strong>
+            <a href="{% url 'mini_insta:show_profile' c.profile.pk %}">
+              {{ c.profile.display_name }}
+            </a>
+          </strong>
+          <small> · {{ c.timestamp }}</small>
+          <div>{{ c.text }}</div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No comments yet.</p>
+  {% endif %}
+{% endwith %}
+
 <p style="margin-top:1rem;">
   <a href="{% url 'mini_insta:update_post' post.pk %}" class="button">Update</a>
   <a href="{% url 'mini_insta:delete_post' post.pk %}" class="button" style="margin-left:.5rem;">Delete</a>
