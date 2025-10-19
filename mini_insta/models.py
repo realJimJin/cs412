@@ -24,6 +24,33 @@ class Profile (models.Model):
     def get_absolute_url(self):
         # Redirect back to this profile’s page after successful update
         return reverse("mini_insta:show_profile", kwargs={"pk": self.pk})
+    def get_followers(self):
+        """
+        Return a list of Profile objects that follow this profile.
+        i.e., all follower_profile where profile == self
+        """
+        followers_qs = Profile.objects.filter(follower_profile__profile=self).distinct()
+        return list(followers_qs)
+
+    def get_num_followers(self):
+        """
+        Return the count of followers for this profile.
+        """
+        return Follow.objects.filter(profile=self).count()
+
+    def get_following(self):
+        """
+        Return a list of Profile objects that this profile is following.
+        i.e., all profile where follower_profile == self
+        """
+        following_qs = Profile.objects.filter(profile__follower_profile=self).distinct()
+        return list(following_qs)
+
+    def get_num_following(self):
+        """
+        Return the count of profiles this profile is following.
+        """
+        return Follow.objects.filter(follower_profile=self).count()
 
 class Post(models.Model):
     '''Encapsulate the idea of a Post about a Profile'''
