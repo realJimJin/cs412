@@ -76,7 +76,7 @@ class Post(models.Model):
 
     def get_num_likes(self):
          """Return the count of likes on this post."""
-        return self.likes.count()
+         return self.likes.count()
 
     def __str__(self):
         '''Return a string representation of this Post.'''
