@@ -70,6 +70,14 @@ class Post(models.Model):
         """Return all comments for this post (newest first)."""
         return Comment.objects.filter(post=self).select_related("profile").order_by("-timestamp")
 
+    def get_likes(self):
+        """Return a queryset of Like objects on this post (newest first)."""
+        return Like.objects.filter(post=self).select_related("profile").order_by("-timestamp")
+
+    def get_num_likes(self):
+         """Return the count of likes on this post."""
+        return self.likes.count()
+
     def __str__(self):
         '''Return a string representation of this Post.'''
         return f'{self.caption}'
