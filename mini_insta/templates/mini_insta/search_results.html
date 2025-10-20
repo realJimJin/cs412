@@ -1,0 +1,61 @@
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+<h2>Results for “{{ query }}”</h2>
+<p>
+  <a href="{% url 'mini_insta:search' profile.pk %}">New search</a> ·
+  <a href="{% url 'mini_insta:show_profile' profile.pk %}">Back to profile</a>
+</p>
+
+<hr>
+
+<h3>Profiles</h3>
+{% if profile_results %}
+  <ul>
+    {% for p in profile_results %}
+      <li>
+        <a href="{% url 'mini_insta:show_profile' p.pk %}">
+          {{ p.display_name }} (@{{ p.username }})
+        </a>
+        {% if p.bio_text %}<div><small>{{ p.bio_text }}</small></div>{% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No matching profiles.</p>
+{% endif %}
+
+<hr>
+
+<h3>Posts</h3>
+{% if posts %}
+  {% for post in posts %}
+    <article style="margin-bottom:1rem;">
+      <div style="display:flex;align-items:center;gap:.5rem;">
+        {% if post.profile.profile_image_url %}
+          <img src="{{ post.profile.profile_image_url }}" alt="{{ post.profile.display_name }}"
+               style="width:36px;height:36px;border-radius:50%;object-fit:cover;">
+        {% endif %}
+        <a href="{% url 'mini_insta:show_profile' post.profile.pk %}">
+          <strong>{{ post.profile.display_name }}</strong>
+        </a>
+        <small>· {{ post.timestamp }}</small>
+      </div>
+
+      {% with photos=post.get_all_photos %}
+        {% if photos %}
+          <div style="margin:.5rem 0;">
+            <img src="{{ photos.0.get_image_url }}" alt="Post image" style="max-width:100%;height:auto;">
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <p>{{ post.caption }}</p>
+      <small><a href="{% url 'mini_insta:show_post' post.pk %}">Open post</a></small>
+    </article>
+    <hr>
+  {% endfor %}
+{% else %}
+  <p>No matching posts.</p>
+{% endif %}
+{% endblock %}
