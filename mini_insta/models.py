@@ -118,4 +118,19 @@ class Comment(models.Model):
 
     def __str__(self):
         preview = (self.text[:40] + "…") if len(self.text) > 40 else self.text
-        return f"@{self.profile.username} on Post#{self.post.pk} — {preview}"           
+        return f"@{self.profile.username} on Post#{self.post.pk} — {preview}"
+
+class Like(models.Model):
+    """A 'like' made by a Profile on a Post."""
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="likes")
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Prevent duplicate likes by the same profile on the same post
+        constraints = [
+            models.UniqueConstraint(fields=["post", "profile"], name="unique_like_per_profile_per_post")
+        ]
+
+    def __str__(self):
+        return f"Like by @{self.profile.username} on Post#{self.post.pk} at {self.timestamp}"           
