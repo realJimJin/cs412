@@ -6,6 +6,9 @@
   <!-- Profile info -->
   <div class="profile-info">
 
+  <!-- Like count -->
+<p><strong>{{ post.get_num_likes }}</strong> {{ post.get_num_likes|pluralize:"Like,Likes" }}</p>
+
     <div class="profile-header-item">
       <p>{{ post.caption }}</p>
     </div>
