@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, DeleteView, U
 from .forms import CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm 
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Q
 
 # Create your views here.
 class ProfileListView(ListView):
@@ -148,4 +148,40 @@ class PostFeedListView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["profile"] = self.profile
+        return ctx
+
+class SearchView(ListView):
+    """Search Posts (by caption) and Profiles (by username/display_name/bio)."""
+    template_name = "mini_insta/search_results.html"
+    context_object_name = "posts"  # the ListView queryset name
+
+    def dispatch(self, request, *args, **kwargs):
+        # who is doing the search
+        self.profile = get_object_or_404(Profile, pk=self.kwargs["pk"])
+        self.query = request.GET.get("q")
+        # If no query yet, show the search form page
+        if not self.query:
+            return render(request, "mini_insta/search.html", {"profile": self.profile})
+        # Otherwise proceed to results
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        # Return matching Posts when a query is present
+        return (
+            Post.objects
+            .filter(caption__icontains=self.query)
+            .select_related("profile")
+            .order_by("-timestamp")
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["profile"] = self.profile
+        ctx["query"] = self.query or ""
+        # Profiles that match (username, display_name, or bio_text)
+        ctx["profile_results"] = Profile.objects.filter(
+            Q(username__icontains=self.query) |
+            Q(display_name__icontains=self.query) |
+            Q(bio_text__icontains=self.query)
+        ).order_by("display_name")
         return ctx
