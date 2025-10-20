@@ -1,0 +1,83 @@
+{% extends "mini_insta/base.html" %}
+
+{% block content %}
+<h2>Feed for {{ profile.display_name }}</h2>
+<p><a href="{% url 'mini_insta:show_profile' profile.pk %}">← Back to profile</a></p>
+<hr>
+
+{% if posts %}
+  {% for post in posts %}
+    <article class="post-card" style="margin-bottom:1.5rem;">
+      <!-- Header: author -->
+      <div class="post-header" style="display:flex;align-items:center;gap:.75rem;">
+        {% if post.profile.profile_image_url %}
+          <img src="{{ post.profile.profile_image_url }}" alt="{{ post.profile.display_name }}"
+               style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+        {% else %}
+          <img src="https://via.placeholder.com/40" alt="No image"
+               style="width:40px;height:40px;border-radius:50%;object-fit:cover;">
+        {% endif %}
+        <div>
+          <a href="{% url 'mini_insta:show_profile' post.profile.pk %}">
+            <strong>{{ post.profile.display_name }}</strong>
+          </a>
+          <div><small>{{ post.timestamp }}</small></div>
+        </div>
+      </div>
+
+      <!-- Media (first photo if any) -->
+      {% with photos=post.get_all_photos %}
+        {% if photos %}
+          <div class="post-media" style="margin:.75rem 0;">
+            <img src="{{ photos.0.get_image_url }}" alt="Post photo" style="max-width:100%;height:auto;">
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Likes + caption -->
+      <div class="post-body">
+        <div><strong>{{ post.get_num_likes }}</strong> {{ post.get_num_likes|pluralize:"Like,Likes" }}</div>
+        <p style="margin:.5rem 0;">{{ post.caption }}</p>
+        <a href="{% url 'mini_insta:show_post' post.pk %}">View post</a>
+      </div>
+
+      <!-- Comments (show a few) -->
+      {% with comments=post.get_all_comments %}
+        {% if comments %}
+          <div class="post-comments" style="margin-top:.5rem;">
+            <h4 style="margin:0 0 .25rem 0;">Comments</h4>
+            <ul style="margin:.25rem 0 0 1rem;">
+              {% for c in comments|slice:":3" %}
+                <li>
+                  <a href="{% url 'mini_insta:show_profile' c.profile.pk %}"><strong>{{ c.profile.display_name }}</strong></a>
+                  <small>· {{ c.timestamp }}</small>
+                  <div>{{ c.text }}</div>
+                </li>
+              {% endfor %}
+            </ul>
+            {% if comments|length > 3 %}
+              <small><a href="{% url 'mini_insta:show_post' post.pk %}">View all comments</a></small>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endwith %}
+    </article>
+    <hr>
+  {% endfor %}
+
+  {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}">← Newer</a>
+      {% endif %}
+      <span>Page {{ page_obj.number }} of {{ paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Older →</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+{% else %}
+  <p>Your feed is empty. Follow some profiles to see posts here.</p>
+{% endif %}
+{% endblock %}
