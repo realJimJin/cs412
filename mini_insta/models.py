@@ -72,7 +72,7 @@ class Profile (models.Model):
           )
              .order_by("-timestamp"))
 
-       return qs
+        return qs
 
 class Post(models.Model):
     '''Encapsulate the idea of a Post about a Profile'''
