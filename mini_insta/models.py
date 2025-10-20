@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.db.models import Prefetch
 
 # Create your models here.
 
@@ -51,6 +52,27 @@ class Profile (models.Model):
         Return the count of profiles this profile is following.
         """
         return Follow.objects.filter(follower_profile=self).count()
+    def get_post_feed(self):
+        """
+        Return a queryset of Posts made by the profiles this Profile follows,
+        newest first.
+        """
+        # IDs of profiles this user follows
+        followed_ids = (Follow.objects
+                    .filter(follower_profile=self)
+                    .values_list("profile_id", flat=True))
+
+        # Pull posts from followed profiles; eager-load useful relations
+        qs = (Post.objects
+             .filter(profile_id__in=followed_ids)
+             .select_related("profile")
+             .prefetch_related(
+             # first photo per post will be accessed; keep it simple
+             Prefetch("photo_set", queryset=Photo.objects.order_by("timestamp")),
+          )
+             .order_by("-timestamp"))
+
+       return qs
 
 class Post(models.Model):
     '''Encapsulate the idea of a Post about a Profile'''
