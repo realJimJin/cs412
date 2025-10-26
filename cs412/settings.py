@@ -145,3 +145,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = True
+
+LOGIN_URL = "mini_insta:login"
+LOGIN_REDIRECT_URL = "mini_insta:my_profile"   # where to land after login
+LOGOUT_REDIRECT_URL = "mini_insta:show_all_profiles"
