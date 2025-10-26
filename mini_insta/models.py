@@ -6,7 +6,8 @@ from django.db.models import Prefetch
 
 class Profile (models.Model):
     '''Encapsulate the data of a user profile on mini_insta.'''
-
+    
+    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
     # define the data attributes of the Article object
     username = models.TextField(blank=True)
     display_name = models.TextField(blank=True)
