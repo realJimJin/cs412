@@ -12,6 +12,42 @@ from django.contrib.auth import views as auth_views
 from .models import Profile, Post, Photo
 from .forms import CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm
 
+
+# --- Registration view ---
+from django.views import View
+from django.contrib.auth import login
+from .forms import UserRegistrationForm
+from django.contrib.auth.models import User
+
+class UserRegistrationView(View):
+    template_name = "mini_insta/register.html"
+
+    def get(self, request):
+        form = UserRegistrationForm()
+        return render(request, self.template_name, {"form": form})
+
+    def post(self, request):
+        form = UserRegistrationForm(request.POST)
+        if not form.is_valid():
+            return render(request, self.template_name, {"form": form})
+
+        # Create User
+        user = form.save()  # UserCreationForm handles username & password
+        user.email = form.cleaned_data["email"]
+        user.save()
+
+        # Create linked Profile
+        Profile.objects.create(
+            user=user,
+            username=user.username,
+            display_name=form.cleaned_data["display_name"],
+            bio_text=form.cleaned_data.get("bio_text", ""),
+            profile_image_url=form.cleaned_data.get("profile_image_url", ""),
+        )
+
+        # Auto-login and send to their profile
+        login(request, user)
+        return redirect("mini_insta:my_profile")
 # --- Small helper mixins so views can find "my" Profile and enforce ownership ---
 
 class MustBeLoggedIn(LoginRequiredMixin):
