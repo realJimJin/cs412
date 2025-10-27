@@ -3,27 +3,38 @@
 <h2>Create your account</h2>
 <form method="post">
   {% csrf_token %}
-  <fieldset>
-    <legend>Account</legend>
-    {{ form.username.label_tag }} {{ form.username }}<br>
-    {{ form.email.label_tag }} {{ form.email }}<br>
-    {{ form.password1.label_tag }} {{ form.password1 }}<br>
-    {{ form.password2.label_tag }} {{ form.password2 }}<br>
-  </fieldset>
+  {{ form.non_field_errors }}
+  <p>
+    <label>Username</label><br>
+    {{ form.username }} {{ form.username.errors }}
+  </p>
+  <p>
+    <label>Email (optional)</label><br>
+    {{ form.email }} {{ form.email.errors }}
+  </p>
+  <p>
+    <label>Password</label><br>
+    {{ form.password1 }} {{ form.password1.errors }}
+  </p>
+  <p>
+    <label>Confirm Password</label><br>
+    {{ form.password2 }} {{ form.password2.errors }}
+  </p>
+  <hr>
+  <p>
+    <label>Display name</label><br>
+    {{ form.display_name }} {{ form.display_name.errors }}
+  </p>
+  <p>
+    <label>Bio</label><br>
+    {{ form.bio_text }} {{ form.bio_text.errors }}
+  </p>
+  <p>
+    <label>Profile image URL</label><br>
+    {{ form.profile_image_url }} {{ form.profile_image_url.errors }}
+  </p>
 
-  <fieldset>
-    <legend>Profile</legend>
-    <label for="id_display_name">Display name</label>
-    <input type="text" name="display_name" id="id_display_name" required><br>
-
-    <label for="id_profile_image_url">Profile image URL</label>
-    <input type="url" name="profile_image_url" id="id_profile_image_url"><br>
-
-    <label for="id_bio_text">Bio</label>
-    <textarea name="bio_text" id="id_bio_text" rows="4"></textarea>
-  </fieldset>
-
-  <button type="submit">Create account</button>
+  <button type="submit">Register</button>
 </form>
-<p>Already have an account? <a href="{% url 'mini_insta:login' %}">Log in</a>.</p>
+<p>Already have an account? <a href="{% url 'mini_insta:login' %}">Log in</a></p>
 {% endblock %}
