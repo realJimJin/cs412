@@ -2,6 +2,8 @@
 # define the forms that we use for create/update/delete operations
 
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from .models import Profile, Post, Photo 
 
 class CreatePostForm(forms.ModelForm):
@@ -12,6 +14,7 @@ class CreatePostForm(forms.ModelForm):
         '''associate this form with a model from our database.'''
         model = Post
         fields = ['caption']
+
 
 class PhotoForm(forms.ModelForm):
     class Meta:
@@ -36,3 +39,16 @@ class UpdatePostForm(forms.ModelForm):
         model = Post
         fields = ["caption"]
         labels = {"caption": "Caption"}
+
+
+# ---------- NEW for Task 2: Registration ----------
+class UserRegistrationForm(UserCreationForm):
+    """Form to register a new user and capture profile info."""
+    email = forms.EmailField(required=True)
+    display_name = forms.CharField(max_length=100, required=True)
+    bio_text = forms.CharField(widget=forms.Textarea, required=False)
+    profile_image_url = forms.URLField(required=False)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
