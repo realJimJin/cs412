@@ -32,7 +32,11 @@ urlpatterns = [
     path("post/<int:pk>/update", views.UpdatePostView.as_view(), name="update_post"),
     path("post/<int:pk>/delete", views.DeletePostView.as_view(), name="delete_post"),
 
-    # Optional: combined user+profile creation flow you added
+    path("profile/<int:pk>/follow", views.FollowCreateView.as_view(), name="follow"),
+    path("profile/<int:pk>/delete_follow", views.FollowDeleteView.as_view(), name="delete_follow"),
+    path("post/<int:pk>/like", views.LikeCreateView.as_view(), name="like"),
+    path("post/<int:pk>/delete_like", views.LikeDeleteView.as_view(), name="delete_like"),
+    # Optional: combined user+profile creation flow 
     path("create_profile/", views.CreateProfileView.as_view(), name="create_profile"),
 ]
 
