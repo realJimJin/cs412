@@ -37,6 +37,17 @@ class UserRegistrationForm(UserCreationForm):
     bio_text = forms.CharField(widget=forms.Textarea, required=False, label="Bio")
     profile_image_url = forms.URLField(required=False, label="Profile image URL")
 
+class CreateProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["username", "display_name", "bio_text", "profile_image_url"]
+        labels = {
+            "username": "Username (handle)",
+            "display_name": "Display name",
+            "bio_text": "Bio",
+            "profile_image_url": "Profile image URL",
+        }
+
     class Meta(UserCreationForm.Meta):
         model = User
         fields = ("username", "email", "password1", "password2", "display_name", "bio_text", "profile_image_url")
