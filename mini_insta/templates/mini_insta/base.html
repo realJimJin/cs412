@@ -1,30 +1,40 @@
-<!-- templates/mini_insta/base.html -->
 {% load static %}
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>Mini Instagram</title>
     <link rel="stylesheet" href="{% static 'style_insta.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
+
     {% block content %}{% endblock %}
 
     <footer>
       <hr>
-      <a href="{% url 'mini_insta:show_all_profiles' %}">← Back to All Profiles</a>
+      <a href="{% url 'mini_insta:show_all_profiles' %}">← All Profiles</a>
 
-      {# Show the viewed Profile link if a profile is in context #}
+      {# If we’re viewing a specific profile, show a link back to it #}
       {% if profile %}
-        · <a href="{% url 'mini_insta:show_profile' profile.pk %}">Profile</a>
+        · <a href="{% url 'mini_insta:show_profile' profile.pk %}">View Profile</a>
       {% endif %}
 
-      {# Owner / logged-in actions use pk-less routes #}
       {% if request.user.is_authenticated %}
-        · <a href="{% url 'mini_insta:show_feed' %}">Home / Feed</a>
+        · <a href="{% url 'mini_insta:my_profile' %}">My Profile</a>
+        · <a href="{% url 'mini_insta:show_feed' %}">Feed</a>
         · <a href="{% url 'mini_insta:search' %}">Search</a>
+
+        {# Only the owner sees Update Profile / Create Post #}
         {% if profile and profile.user_id == request.user.id %}
           · <a href="{% url 'mini_insta:update_profile' %}">Update Profile</a>
           · <a href="{% url 'mini_insta:create_post' %}">+ Create Post</a>
         {% endif %}
+
+        · <a href="{% url 'mini_insta:logout' %}">Logout</a>
+      {% else %}
+        · <a href="{% url 'mini_insta:login' %}">Login</a>
+        · <a href="{% url 'mini_insta:register' %}">Register</a>
       {% endif %}
     </footer>
   </body>
