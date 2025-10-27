@@ -1,0 +1,29 @@
+{% extends "mini_insta/base.html" %}
+{% block content %}
+<h2>Create your account</h2>
+<form method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend>Account</legend>
+    {{ form.username.label_tag }} {{ form.username }}<br>
+    {{ form.email.label_tag }} {{ form.email }}<br>
+    {{ form.password1.label_tag }} {{ form.password1 }}<br>
+    {{ form.password2.label_tag }} {{ form.password2 }}<br>
+  </fieldset>
+
+  <fieldset>
+    <legend>Profile</legend>
+    <label for="id_display_name">Display name</label>
+    <input type="text" name="display_name" id="id_display_name" required><br>
+
+    <label for="id_profile_image_url">Profile image URL</label>
+    <input type="url" name="profile_image_url" id="id_profile_image_url"><br>
+
+    <label for="id_bio_text">Bio</label>
+    <textarea name="bio_text" id="id_bio_text" rows="4"></textarea>
+  </fieldset>
+
+  <button type="submit">Create account</button>
+</form>
+<p>Already have an account? <a href="{% url 'mini_insta:login' %}">Log in</a>.</p>
+{% endblock %}
