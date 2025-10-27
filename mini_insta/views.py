@@ -142,6 +142,44 @@ class PostFeedListView(MustBeLoggedIn, ListView):
         ctx["profile"] = self.get_current_profile()
         return ctx
 
+class CreateProfileView(CreateView):
+    template_name = "mini_insta/create_profile_form.html"
+    form_class = CreateProfileForm
+    model = Profile
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        # blank user form on GET; bound on POST if errors
+        if self.request.method == "POST":
+            ctx["user_form"] = UserCreationForm(self.request.POST)
+        else:
+            ctx["user_form"] = UserCreationForm()
+        return ctx
+
+    def form_valid(self, form):
+        # Rebuild the UserCreationForm from POST and validate
+        user_form = UserCreationForm(self.request.POST)
+        if not user_form.is_valid():
+            # Re-render both forms with errors
+            return render(self.request, self.template_name, {
+                "form": form,
+                "user_form": user_form,
+            })
+
+        # Create the User
+        user = user_form.save()
+
+        # Log them in (DB backend)
+        login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+        # Attach the user to the Profile instance being created
+        form.instance.user = user
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse("mini_insta:my_profile")
+
 class SearchView(MustBeLoggedIn, ListView):
     template_name = "mini_insta/search_results.html"
     context_object_name = "posts"
