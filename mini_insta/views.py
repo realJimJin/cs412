@@ -3,6 +3,9 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
 from django.db.models import Q
 
+from django.views.generic import FormView
+from django.contrib.auth import login
+from .forms import UserRegistrationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
 
