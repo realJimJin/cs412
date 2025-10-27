@@ -1,65 +1,28 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.urls import reverse, reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
+from django.urls import reverse
+from django.views.generic import (
+    ListView, DetailView, CreateView, DeleteView, UpdateView, FormView
+)
 from django.db.models import Q
 
-from django.views.generic import FormView
-from django.contrib.auth import login
-from .forms import UserRegistrationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
+from django.contrib.auth import login
 
 from .models import Profile, Post, Photo
-from .forms import CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm
+from .forms import (
+    CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm, UserRegistrationForm
+)
 
-
-# --- Registration view ---
-from django.views import View
-from django.contrib.auth import login
-from .forms import UserRegistrationForm
-from django.contrib.auth.models import User
-
-class UserRegistrationView(View):
-    template_name = "mini_insta/register.html"
-
-    def get(self, request):
-        form = UserRegistrationForm()
-        return render(request, self.template_name, {"form": form})
-
-    def post(self, request):
-        form = UserRegistrationForm(request.POST)
-        if not form.is_valid():
-            return render(request, self.template_name, {"form": form})
-
-        # Create User
-        user = form.save()  # UserCreationForm handles username & password
-        user.email = form.cleaned_data["email"]
-        user.save()
-
-        # Create linked Profile
-        Profile.objects.create(
-            user=user,
-            username=user.username,
-            display_name=form.cleaned_data["display_name"],
-            bio_text=form.cleaned_data.get("bio_text", ""),
-            profile_image_url=form.cleaned_data.get("profile_image_url", ""),
-        )
-
-        # Auto-login and send to their profile
-        login(request, user)
-        return redirect("mini_insta:my_profile")
-# --- Small helper mixins so views can find "my" Profile and enforce ownership ---
+# ---------- Auth convenience mixins ----------
 
 class MustBeLoggedIn(LoginRequiredMixin):
     login_url = "mini_insta:login"
 
     def get_current_profile(self):
-        """Return the Profile belonging to the logged-in User."""
         return get_object_or_404(Profile, user=self.request.user)
 
-
 class MustOwnPost(MustBeLoggedIn):
-    """Ensure the current user owns the Post being edited/deleted."""
     def dispatch(self, request, *args, **kwargs):
         resp = super().dispatch(request, *args, **kwargs)
         post = getattr(self, "object", None) or self.get_object()
@@ -69,19 +32,17 @@ class MustOwnPost(MustBeLoggedIn):
         return resp
 
 
-# ---------------- Public (read-only) views ----------------
+# ---------- Public (read-only) views ----------
 
 class ProfileListView(ListView):
     model = Profile
     template_name = "mini_insta/show_all_profiles.html"
     context_object_name = "profiles"
 
-
 class ProfileDetailView(DetailView):
     model = Profile
     template_name = "mini_insta/show_profile.html"
     context_object_name = "profile"
-
 
 class PostDetailView(DetailView):
     model = Post
@@ -89,15 +50,13 @@ class PostDetailView(DetailView):
     context_object_name = "post"
 
 
-# ---------------- Owned views (require login, no pk in URL) ----------------
+# ---------- Owned views (require login; no pk in URL) ----------
 
 class MyProfileDetailView(MustBeLoggedIn, DetailView):
     template_name = "mini_insta/show_profile.html"
     context_object_name = "profile"
-
     def get_object(self):
         return self.get_current_profile()
-
 
 class CreatePostView(MustBeLoggedIn, CreateView):
     form_class = CreatePostForm
@@ -112,7 +71,6 @@ class CreatePostView(MustBeLoggedIn, CreateView):
     def post(self, request, *args, **kwargs):
         self.object = None
         profile = self.get_current_profile()
-
         form = self.get_form()
         photo_form = PhotoForm(request.POST, request.FILES)
 
@@ -134,15 +92,12 @@ class CreatePostView(MustBeLoggedIn, CreateView):
             "profile": profile,
         })
 
-
 class UpdateProfileView(MustBeLoggedIn, UpdateView):
     model = Profile
     form_class = UpdateProfileForm
     template_name = "mini_insta/update_profile_form.html"
-
     def get_object(self):
         return self.get_current_profile()
-
 
 class UpdatePostView(MustOwnPost, UpdateView):
     model = Post
@@ -157,7 +112,6 @@ class UpdatePostView(MustOwnPost, UpdateView):
 
     def get_success_url(self):
         return reverse("mini_insta:show_post", kwargs={"pk": self.get_object().pk})
-
 
 class DeletePostView(MustOwnPost, DeleteView):
     model = Post
@@ -174,7 +128,6 @@ class DeletePostView(MustOwnPost, DeleteView):
     def get_success_url(self):
         return reverse("mini_insta:my_profile")
 
-
 class PostFeedListView(MustBeLoggedIn, ListView):
     template_name = "mini_insta/show_feed.html"
     context_object_name = "posts"
@@ -182,14 +135,12 @@ class PostFeedListView(MustBeLoggedIn, ListView):
 
     def get_queryset(self):
         me = self.get_current_profile()
-        # assumes you implemented Profile.get_post_feed() that returns a QS
         return me.get_post_feed().order_by("-timestamp").select_related("profile")
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx["profile"] = self.get_current_profile()
         return ctx
-
 
 class SearchView(MustBeLoggedIn, ListView):
     template_name = "mini_insta/search_results.html"
@@ -220,7 +171,20 @@ class SearchView(MustBeLoggedIn, ListView):
         return ctx
 
 
-# ---------------- Auth views (templates: login.html) ----------------
+# ---------- Followers/Following (public) ----------
+
+class ShowFollowersDetailView(DetailView):
+    model = Profile
+    template_name = "mini_insta/show_followers.html"
+    context_object_name = "profile"
+
+class ShowFollowingDetailView(DetailView):
+    model = Profile
+    template_name = "mini_insta/show_following.html"
+    context_object_name = "profile"
+
+
+# ---------- Auth views ----------
 
 class LoginView(auth_views.LoginView):
     template_name = "mini_insta/login.html"
@@ -228,29 +192,16 @@ class LoginView(auth_views.LoginView):
 class LogoutView(auth_views.LogoutView):
     next_page = "mini_insta:show_all_profiles"
 
-# --- Simple read-only follower/following pages (public) ---
 
-class FollowersDetailView(DetailView):
-    """Show who follows this profile."""
-    model = Profile
-    template_name = "mini_insta/show_followers.html"
-    context_object_name = "profile"
-
-class FollowingDetailView(DetailView):
-    """Show whom this profile follows."""
-    model = Profile
-    template_name = "mini_insta/show_following.html"
-    context_object_name = "profile"
+# ---------- Registration ----------
 
 class UserRegistrationView(FormView):
     template_name = "mini_insta/register.html"
     form_class = UserRegistrationForm
 
     def form_valid(self, form):
-        # Create the user
-        user = form.save()
-
-        # Create the linked Profile from extra fields
+        user = form.save()  # creates User from UserCreationForm fields
+        # create linked Profile
         Profile.objects.create(
             user=user,
             username=user.username,
@@ -258,7 +209,5 @@ class UserRegistrationView(FormView):
             bio_text=form.cleaned_data.get("bio_text", ""),
             profile_image_url=form.cleaned_data.get("profile_image_url", "")
         )
-
-        # Log them in and send to their profile
         login(self.request, user)
         return redirect("mini_insta:my_profile")
