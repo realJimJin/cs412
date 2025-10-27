@@ -4,7 +4,7 @@ from django.views.generic import (
     ListView, DetailView, CreateView, DeleteView, UpdateView, FormView
 )
 from django.db.models import Q
-
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth import login
