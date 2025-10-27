@@ -3,6 +3,20 @@
 {% block content %}
 <main class="grid profile-header">
 
+<p><strong>{{ post.get_num_likes }} Likes</strong></p>
+
+{% if request.user.is_authenticated %}
+  {% if post.profile.user_id != request.user.id %}
+    <form action="{% url 'mini_insta:like' post.pk %}" method="post" style="display:inline">
+      {% csrf_token %}
+      {% if liked_by_me %}
+        <button formaction="{% url 'mini_insta:delete_like' post.pk %}" type="submit">Unlike</button>
+      {% else %}
+        <button type="submit">Like</button>
+      {% endif %}
+    </form>
+  {% endif %}
+{% endif %}
   <!-- Profile info -->
   <div class="profile-info">
 
