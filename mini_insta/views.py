@@ -20,11 +20,18 @@ def _back(request, fallback):
 
 # ---------- Auth convenience mixins ----------
 
+
 class MustBeLoggedIn(LoginRequiredMixin):
     login_url = "mini_insta:login"
 
     def get_current_profile(self):
-        return get_object_or_404(Profile, user=self.request.user)
+        qs = Profile.objects.filter(user=self.request.user).order_by("pk")
+        obj = qs.first()
+        if not obj:
+            from django.http import Http404
+            raise Http404("No Profile associated with the current user.")
+        # (Optional) log/print if qs.count() > 1 to notice the data issue.
+        return obj
 
 class MustOwnPost(MustBeLoggedIn):
     def dispatch(self, request, *args, **kwargs):
