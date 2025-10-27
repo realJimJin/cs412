@@ -1,0 +1,24 @@
+{% extends "mini_insta/base.html" %}
+{% block content %}
+<main class="auth">
+  <h1>Create your account & profile</h1>
+
+  <form method="post" action="{% url 'mini_insta:create_profile' %}">
+    {% csrf_token %}
+
+    <fieldset>
+      <legend>Account</legend>
+      {{ user_form.as_p }}
+    </fieldset>
+
+    <fieldset>
+      <legend>Profile</legend>
+      {{ form.as_p }}
+    </fieldset>
+
+    <button type="submit">Create account</button>
+  </form>
+
+  <p>Already have an account? <a href="{% url 'mini_insta:login' %}">Log in</a></p>
+</main>
+{% endblock %}
