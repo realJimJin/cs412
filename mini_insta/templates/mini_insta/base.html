@@ -1,26 +1,31 @@
 <!-- templates/mini_insta/base.html -->
 {% load static %}
-
 <html>
-    <head>
-        <title>Mini Instagram</title>
-        <link rel="stylesheet" href="{% static 'style_insta.css' %}">
-    </head>
+  <head>
+    <title>Mini Instagram</title>
+    <link rel="stylesheet" href="{% static 'style_insta.css' %}">
+  </head>
+  <body>
+    {% block content %}{% endblock %}
 
-  <!-- substitute in the specific content here -->
-        {% block content %}
-        {% endblock %}
-<footer>
-    <hr>
-    <a href="{% url 'mini_insta:show_all_profiles' %}">← Back to All Profiles</a>
- {# Only show "Home / Feed" if 'profile' exists in context #}
-  
-  {% if profile %}
-    · <a href="{% url 'mini_insta:show_feed' profile.pk %}">Home / Feed</a>
-    · <a href="{% url 'mini_insta:show_profile' profile.pk %}">Profile</a>
-    | <a href="{% url 'mini_insta:create_post' profile.pk %}">+ Create Post</a>
-  {% endif %}
-  </footer>
-    </body>
+    <footer>
+      <hr>
+      <a href="{% url 'mini_insta:show_all_profiles' %}">← Back to All Profiles</a>
 
+      {# Show the viewed Profile link if a profile is in context #}
+      {% if profile %}
+        · <a href="{% url 'mini_insta:show_profile' profile.pk %}">Profile</a>
+      {% endif %}
+
+      {# Owner / logged-in actions use pk-less routes #}
+      {% if request.user.is_authenticated %}
+        · <a href="{% url 'mini_insta:show_feed' %}">Home / Feed</a>
+        · <a href="{% url 'mini_insta:search' %}">Search</a>
+        {% if profile and profile.user_id == request.user.id %}
+          · <a href="{% url 'mini_insta:update_profile' %}">Update Profile</a>
+          · <a href="{% url 'mini_insta:create_post' %}">+ Create Post</a>
+        {% endif %}
+      {% endif %}
+    </footer>
+  </body>
 </html>
