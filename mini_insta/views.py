@@ -11,7 +11,7 @@ from django.contrib.auth import login
 
 from .models import Profile, Post, Photo
 from .forms import (
-    CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm, UserRegistrationForm
+    CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm, UserRegistrationForm, CreateProfileForm, 
 )
 
 # ---------- Auth convenience mixins ----------
