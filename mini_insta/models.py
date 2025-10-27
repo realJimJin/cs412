@@ -9,7 +9,7 @@ class Profile(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="profiles",
-        null=True,
+        null=False,
         blank=True,
         default=1
     )
