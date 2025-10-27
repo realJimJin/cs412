@@ -20,15 +20,15 @@
     </div>
 
     <div class="profile-header-item">
-  <strong>
-    <a href="{% url 'mini_insta:show_followers' profile.pk %}">
-      {{ profile.get_num_followers }}
-    </a> Followers ·
-    <a href="{% url 'mini_insta:show_following' profile.pk %}">
-      {{ profile.get_num_following }}
-    </a> Following
-  </strong>
-</div>
+      <strong>
+        <a href="{% url 'mini_insta:show_followers' profile.pk %}">
+          {{ profile.get_num_followers }}
+        </a> Followers ·
+        <a href="{% url 'mini_insta:show_following' profile.pk %}">
+          {{ profile.get_num_following }}
+        </a> Following
+      </strong>
+    </div>
 
     <div class="profile-header-item">
       <p>{{ profile.bio_text }}</p>
@@ -37,8 +37,25 @@
     <div class="profile-header-item">
       <small>Joined: {{ profile.join_date }}</small>
     </div>
+
+    <!-- Owner-only actions -->
+    {% if request.user.is_authenticated and profile.user_id == request.user.id %}
+      <div class="profile-header-item" style="margin-top: .75rem;">
+        <a href="{% url 'mini_insta:update_profile' %}" class="button">Update Profile</a>
+        <a href="{% url 'mini_insta:create_post' %}" class="button">+ Create Post</a>
+        <a href="{% url 'mini_insta:show_feed' %}" class="button">Home / Feed</a>
+      </div>
+    {% endif %}
+
+    <!-- Search: any logged-in user -->
+    {% if request.user.is_authenticated %}
+      <div class="profile-header-item" style="margin-top: .5rem;">
+        <a href="{% url 'mini_insta:search' %}">Search</a>
+      </div>
+    {% endif %}
   </div>
 
+  <!-- Posts grid -->
   <div>
     <h2>Posts</h2>
     {% for post in profile.get_all_posts %}
@@ -58,10 +75,5 @@
     {% endfor %}
   </div>
 
-<a href="{% url 'mini_insta:update_profile' profile.pk %}" class="button">
-  Update Profile
-
-<a href="{% url 'mini_insta:search' profile.pk %}">Search</a>
-</a>
 </main>
 {% endblock %}
