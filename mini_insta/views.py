@@ -202,3 +202,24 @@ class FollowingDetailView(DetailView):
     model = Profile
     template_name = "mini_insta/show_following.html"
     context_object_name = "profile"
+
+class UserRegistrationView(FormView):
+    template_name = "mini_insta/register.html"
+    form_class = UserRegistrationForm
+
+    def form_valid(self, form):
+        # Create the user
+        user = form.save()
+
+        # Create the linked Profile from extra fields
+        Profile.objects.create(
+            user=user,
+            username=user.username,
+            display_name=form.cleaned_data["display_name"],
+            bio_text=form.cleaned_data.get("bio_text", ""),
+            profile_image_url=form.cleaned_data.get("profile_image_url", "")
+        )
+
+        # Log them in and send to their profile
+        login(self.request, user)
+        return redirect("mini_insta:my_profile")
