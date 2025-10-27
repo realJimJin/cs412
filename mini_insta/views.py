@@ -188,3 +188,17 @@ class LoginView(auth_views.LoginView):
 
 class LogoutView(auth_views.LogoutView):
     next_page = "mini_insta:show_all_profiles"
+
+# --- Simple read-only follower/following pages (public) ---
+
+class FollowersDetailView(DetailView):
+    """Show who follows this profile."""
+    model = Profile
+    template_name = "mini_insta/show_followers.html"
+    context_object_name = "profile"
+
+class FollowingDetailView(DetailView):
+    """Show whom this profile follows."""
+    model = Profile
+    template_name = "mini_insta/show_following.html"
+    context_object_name = "profile"
