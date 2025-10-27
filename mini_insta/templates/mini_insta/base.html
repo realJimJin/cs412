@@ -31,15 +31,18 @@
           · <a href="{% url 'mini_insta:create_post' %}">+ Create Post</a>
         {% endif %}
 
-        · <a href="{% url 'mini_insta:logout' %}">Logout</a>
+        {# LOGOUT MUST BE A POST #}
+        · <form action="{% url 'mini_insta:logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" style="background:none;border:none;padding:0;margin:0;color:blue;cursor:pointer;">
+              Logout
+            </button>
+          </form>
       {% else %}
         · <a href="{% url 'mini_insta:login' %}">Login</a>
         · <a href="{% url 'mini_insta:register' %}">Register</a>
+        · <a href="{% url 'mini_insta:create_profile' %}">Create Profile</a>
       {% endif %}
-
- {% if not request.user.is_authenticated %}
-  · <a href="{% url 'mini_insta:create_profile' %}">Create Profile</a>
-{% endif %}
     </footer>
   </body>
 </html>
