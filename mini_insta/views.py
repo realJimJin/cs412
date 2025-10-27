@@ -14,6 +14,10 @@ from .forms import (
     CreatePostForm, PhotoForm, UpdateProfileForm, UpdatePostForm, UserRegistrationForm, CreateProfileForm, 
 )
 
+# --- helper: safe redirect back ---
+def _back(request, fallback):
+    return redirect(request.META.get("HTTP_REFERER") or fallback)
+
 # ---------- Auth convenience mixins ----------
 
 class MustBeLoggedIn(LoginRequiredMixin):
@@ -249,3 +253,46 @@ class UserRegistrationView(FormView):
         )
         login(self.request, user)
         return redirect("mini_insta:my_profile")
+
+# ---------- FOLLOW / UNFOLLOW ----------
+
+class FollowCreateView(MustBeLoggedIn, View):
+    """Current user follows the profile identified by pk."""
+    def post(self, request, pk):
+        me = self.get_current_profile()
+        target = get_object_or_404(Profile, pk=pk)
+        if target == me:
+            return HttpResponseForbidden("You cannot follow yourself.")
+        Follow.objects.get_or_create(profile=target, follower_profile=me)
+        return _back(request, reverse("mini_insta:show_profile", kwargs={"pk": pk}))
+
+
+class FollowDeleteView(MustBeLoggedIn, View):
+    """Current user unfollows the profile identified by pk."""
+    def post(self, request, pk):
+        me = self.get_current_profile()
+        target = get_object_or_404(Profile, pk=pk)
+        Follow.objects.filter(profile=target, follower_profile=me).delete()
+        return _back(request, reverse("mini_insta:show_profile", kwargs={"pk": pk}))
+
+
+# ---------- LIKE / UNLIKE ----------
+
+class LikeCreateView(MustBeLoggedIn, View):
+    """Current user likes the post identified by pk."""
+    def post(self, request, pk):
+        me = self.get_current_profile()
+        post = get_object_or_404(Post, pk=pk)
+        if post.profile_id == me.id:
+            return HttpResponseForbidden("You cannot like your own post.")
+        Like.objects.get_or_create(post=post, profile=me)
+        return _back(request, reverse("mini_insta:show_post", kwargs={"pk": pk}))
+
+
+class LikeDeleteView(MustBeLoggedIn, View):
+    """Current user unlikes the post identified by pk."""
+    def post(self, request, pk):
+        me = self.get_current_profile()
+        post = get_object_or_404(Post, pk=pk)
+        Like.objects.filter(post=post, profile=me).delete()
+        return _back(request, reverse("mini_insta:show_post", kwargs={"pk": pk}))
