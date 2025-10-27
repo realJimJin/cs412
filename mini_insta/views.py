@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import (
-    ListView, DetailView, CreateView, DeleteView, UpdateView, FormView
+    ListView, DetailView, CreateView, DeleteView, UpdateView, FormView, View
 )
 from django.db.models import Q
 from django.contrib.auth.forms import UserCreationForm
