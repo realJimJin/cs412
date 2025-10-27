@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 class Profile (models.Model):
     '''Encapsulate the data of a user profile on mini_insta.'''
     
-    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # NEW
     # define the data attributes of the Article object
     username = models.TextField(blank=True)
     display_name = models.TextField(blank=True)
