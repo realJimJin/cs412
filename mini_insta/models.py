@@ -11,6 +11,7 @@ class Profile(models.Model):
         related_name="profiles",
         null=True,
         blank=True,
+        default=1
     )
     username = models.TextField(blank=True)
     display_name = models.TextField(blank=True)
