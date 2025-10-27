@@ -31,6 +31,9 @@ urlpatterns = [
     path("login/", views.LoginView.as_view(), name="login"),
     path("logout/", views.LogoutView.as_view(), name="logout"),
     path("register/", views.UserRegistrationView.as_view(), name="register"),
+
+    path("create_profile/", CreateProfileView.as_view(), name="create_profile"),
+
 ]
 
 if settings.DEBUG:
