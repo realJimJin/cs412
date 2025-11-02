@@ -1,0 +1,127 @@
+{# voter_analytics/templates/voter_analytics/voter_list.html #}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Newton Voters</title>
+    <style>
+        form.filter-form {
+            margin-bottom: 1rem;
+            padding: .75rem;
+            border: 1px solid #ccc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: .5rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: .4rem;
+        }
+        .pagination {
+            margin-top: 1rem;
+        }
+        .pagination span, .pagination a {
+            margin-right: .5rem;
+        }
+    </style>
+</head>
+<body>
+    <h1>Newton Voters</h1>
+
+    <form method="get" class="filter-form">
+        <label>Party:
+            <select name="party">
+                <option value="">-- any --</option>
+                {% for p in parties %}
+                    <option value="{{ p }}" {% if current.party == p %}selected{% endif %}>{{ p }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>Min DOB (year):
+            <select name="min_dob_year">
+                <option value="">-- any --</option>
+                {% for y in years %}
+                    <option value="{{ y }}" {% if current.min_dob_year == y %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>Max DOB (year):
+            <select name="max_dob_year">
+                <option value="">-- any --</option>
+                {% for y in years %}
+                    <option value="{{ y }}" {% if current.max_dob_year == y %}selected{% endif %}>{{ y }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>Voter score:
+            <select name="voter_score">
+                <option value="">-- any --</option>
+                {% for s in scores %}
+                    <option value="{{ s }}" {% if current.voter_score|default:'' == s|stringformat:"s" %}selected{% endif %}>{{ s }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <br><br>
+        <label><input type="checkbox" name="v20state" value="1" {% if current.v20state %}checked{% endif %}> Voted 2020 State</label>
+        <label><input type="checkbox" name="v21town" value="1" {% if current.v21town %}checked{% endif %}> Voted 2021 Town</label>
+        <label><input type="checkbox" name="v21primary" value="1" {% if current.v21primary %}checked{% endif %}> Voted 2021 Primary</label>
+        <label><input type="checkbox" name="v22general" value="1" {% if current.v22general %}checked{% endif %}> Voted 2022 General</label>
+        <label><input type="checkbox" name="v23town" value="1" {% if current.v23town %}checked{% endif %}> Voted 2023 Town</label>
+
+        <br><br>
+        <button type="submit">Filter</button>
+        <a href="{% url 'voters' %}">Clear</a>
+    </form>
+
+    <p>Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }} voters.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>DOB</th>
+                <th>Party</th>
+                <th>Score</th>
+                <th>Detail</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for voter in voters %}
+                <tr>
+                    <td>{{ voter.first_name }} {{ voter.last_name }}</td>
+                    <td>
+                        {{ voter.res_street_number }} {{ voter.res_street_name }}
+                        {% if voter.res_apartment %}apt {{ voter.res_apartment }}{% endif %}
+                        {{ voter.res_zip }}
+                    </td>
+                    <td>{{ voter.date_of_birth }}</td>
+                    <td>{{ voter.party }}</td>
+                    <td>{{ voter.voter_score }}</td>
+                    <td><a href="{% url 'voter' voter.pk %}">view</a></td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="6">No voters match your filter.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?{% if request.GET %}{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?{% if request.GET %}{{ request.GET.urlencode|cut:'page='|cut:'&page=' }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+
+</body>
+</html>
