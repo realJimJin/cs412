@@ -4,7 +4,6 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from .models import Joke, Picture
-from .serializers import JokeSerializer, PictureSerializer
 
 
 @api_view(['GET'])
@@ -13,11 +12,15 @@ def random_joke(request):
     if not jokes:
         return Response({'detail': 'no jokes'}, status=status.HTTP_404_NOT_FOUND)
     joke = random.choice(list(jokes))
-    return Response(JokeSerializer(joke).data)
+    from .serializers import JokeSerializer  # avoid circular import at top
+    serializer = JokeSerializer(joke)
+    return Response(serializer.data)
 
 
 @api_view(['GET', 'POST'])
 def jokes_list(request):
+    from .serializers import JokeSerializer
+
     if request.method == 'GET':
         jokes = Joke.objects.all().order_by('-created_at')
         serializer = JokeSerializer(jokes, many=True)
@@ -33,6 +36,8 @@ def jokes_list(request):
 
 @api_view(['GET'])
 def joke_detail(request, pk):
+    from .serializers import JokeSerializer
+
     try:
         joke = Joke.objects.get(pk=pk)
     except Joke.DoesNotExist:
@@ -43,6 +48,8 @@ def joke_detail(request, pk):
 
 @api_view(['GET'])
 def pictures_list(request):
+    from .serializers import PictureSerializer
+
     pictures = Picture.objects.all().order_by('-created_at')
     serializer = PictureSerializer(pictures, many=True)
     return Response(serializer.data)
@@ -50,6 +57,8 @@ def pictures_list(request):
 
 @api_view(['GET'])
 def picture_detail(request, pk):
+    from .serializers import PictureSerializer
+
     try:
         picture = Picture.objects.get(pk=pk)
     except Picture.DoesNotExist:
@@ -60,8 +69,11 @@ def picture_detail(request, pk):
 
 @api_view(['GET'])
 def random_picture(request):
+    from .serializers import PictureSerializer
+
     pictures = Picture.objects.all()
     if not pictures:
         return Response({'detail': 'no pictures'}, status=status.HTTP_404_NOT_FOUND)
     picture = random.choice(list(pictures))
-    return Response(PictureSerializer(picture).data)
+    serializer = PictureSerializer(picture)
+    return Response(serializer.data)
