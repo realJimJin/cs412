@@ -1,6 +1,6 @@
 import random
 from django.shortcuts import render, get_object_or_404
-from .models import Joke, Picture
+
 
 def random_view(request):
     joke = random.choice(Joke.objects.all())
