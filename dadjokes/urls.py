@@ -1,7 +1,8 @@
 from django.urls import path
-from . import views, api_views   # api_views we'll create next
+from . import views, api_views
 
 urlpatterns = [
+    # HTML pages
     path('', views.random_view, name='home'),
     path('random', views.random_view, name='random'),
 
