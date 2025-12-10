@@ -1,16 +1,19 @@
 body {
-    background-color: #fff;
-    color: slategray;
-    font-family: arial;
+    background-color: #f8fafc; /* light gray-blue */
+    color: #374151; /* slate-700 */
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
 }
 
 h1,h2,h3,h4,h5{
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     font-weight: normal;
     background:aliceblue;
     margin: 0;
 }
 
 a, a:visited {
+    color: #2563eb; /* blue-600 */
     color: slategrey;
     text-decoration: none;
 }
@@ -23,12 +26,13 @@ a:hover {
 }
 
 body {
-    max-width: 960px;
+    max-width: 1000px;
     margin: 20px auto;
     padding: 20px auto;
 }
 
 header {
+    margin-bottom: 10px;
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -46,6 +50,12 @@ footer {
     bottom: 0px;
 }
 
+
+.container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
 
 .wrapper {              /* centering and margin around whole wrapper element */
     border: 2px solid;
@@ -85,6 +95,7 @@ section {
 
 
 nav {
+    margin-bottom: 20px;
     justify-self: end;
     background: none;
     color: darkblue;
@@ -149,6 +160,7 @@ nav button {
 
 /* must have no space before :hover */
 .row:hover {
+    cursor: pointer;
     background-color: aliceblue;    
     border: 1px solid;
 }
@@ -179,6 +191,7 @@ nav button {
 
 /* style the help text in the forms */
 .helptext, .helptext.ul {
+    padding-left: 1.2rem;
     margin-top: 0 auto;
     bottom: 20px;
     color: #bbb;

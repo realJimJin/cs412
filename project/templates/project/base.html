@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>IMLEM Team Manager</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'modern.css' %}">
+</head>
+<body>
+  <div class="container">
+  <header>
+      <h1><a href="{% url 'project:team_list' %}">IMLEM Team Manager</a></h1>
+  </header>
+  <nav>
+      <a href="{% url 'project:team_list' %}">Teams</a>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+      &copy; {{ now|date:"Y" }}
+  </footer>
+  </div>
+</body>
+</html>

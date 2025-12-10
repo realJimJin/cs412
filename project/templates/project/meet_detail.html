@@ -1,0 +1,27 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Meet on {{ meet.date }} ({{ meet.location }}) – {{ meet.team }}</h2>
+<p><a href="{% url 'project:edit_lineup' meet.id %}">Edit lineup</a></p>
+
+<table border="1">
+  <tr>
+    <th>Round</th>
+    <th>Category</th>
+    <th>Student</th>
+    <th>Role</th>
+    <th>Score</th>
+  </tr>
+  {% for ra in meet.round_assignments.all %}
+    <tr>
+      <td>{{ ra.round_number }}</td>
+      <td>{{ ra.category_name }}</td>
+      <td>{{ ra.student }}</td>
+      <td>{{ ra.get_role_display }}</td>
+      <td>{{ ra.score|default:"-" }}</td>
+    </tr>
+  {% empty %}
+    <tr><td colspan="5">No assignments yet.</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

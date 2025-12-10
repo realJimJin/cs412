@@ -1,0 +1,26 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Edit Lineup for {{ meet.date }} – {{ meet.team }}</h2>
+
+<form method="post">
+  {% csrf_token %}
+  {{ formset.management_form }}
+  <table>
+    {% for form in formset.forms %}
+      <tr>
+        {% for field in form.visible_fields %}
+          <td>
+            {{ field.errors }}
+            {{ field }}
+          </td>
+        {% endfor %}
+        {% if formset.can_delete %}<td>{{ form.DELETE }}</td>{% endif %}
+      </tr>
+    {% endfor %}
+  </table>
+  <button type="submit">Save lineup</button>
+</form>
+
+<p><a href="{% url 'project:meet_detail' meet.id %}">Back to meet</a></p>
+{% endblock %}

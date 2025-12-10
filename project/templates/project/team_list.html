@@ -1,0 +1,16 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+<h2>Teams</h2>
+<p><a href="{% url 'project:team_add' %}" class="btn">Add team</a></p>
+<ul>
+  {% for team in teams %}
+    <li>
+      <a href="{% url 'project:team_meets' team.id %}">{{ team }}</a>
+      [<a href="{% url 'project:team_edit' team.id %}">edit</a> | <a href="{% url 'project:team_delete' team.id %}">delete</a>]
+    </li>
+  {% empty %}
+    <li>No teams yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

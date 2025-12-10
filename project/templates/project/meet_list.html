@@ -1,0 +1,16 @@
+{% extends 'project/base.html' %}
+
+{% block content %}
+{% if team %}<h2>Meets for {{ team }}</h2><p><a href="{% url 'project:meet_add' team.id %}">Add meet</a></p>{% else %}<h2>All Meets</h2>{% endif %}
+<ul>
+  {% for meet in meets %}
+    <li>
+      <a href="{% url 'project:meet_detail' meet.id %}">{{ meet.date }} at {{ meet.location }}</a>
+      ({{ meet.round_assignments.count }} assignments)
+      [<a href="{% url 'project:meet_edit' meet.id %}">edit</a> | <a href="{% url 'project:meet_delete' meet.id %}">delete</a>]
+    </li>
+  {% empty %}
+    <li>No meets yet.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
