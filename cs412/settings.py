@@ -13,6 +13,17 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+try:
+    import dj_database_url
+except ImportError:  # pragma: no cover
+    dj_database_url = None
+
+try:
+    import whitenoise  # noqa: F401
+    _HAS_WHITENOISE = True
+except ImportError:  # pragma: no cover
+    _HAS_WHITENOISE = False
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,12 +32,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_i(sjxhso586v0%f)6pz8@r3(qpg-r8eu$i_2i9lgh20tx_ht9'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-dev')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', '0') == '1'
 
-ALLOWED_HOSTS = ['127.0.0.1','cs-webapps.bu.edu']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.onrender.com', 'cs-webapps.bu.edu']
+extra_hosts = os.environ.get('ALLOWED_HOSTS')
+if extra_hosts:
+    ALLOWED_HOSTS += [h.strip() for h in extra_hosts.split(',') if h.strip()]
 
 # Application definition
 
@@ -55,6 +69,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if _HAS_WHITENOISE:
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'cs412.urls'
 
@@ -86,6 +103,10 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+database_url = os.environ.get('DATABASE_URL')
+if database_url and dj_database_url:
+    DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
 
 
 # Password validation
@@ -122,7 +143,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -131,12 +152,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # declarations to reference static files
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATIC_URL = 'static/'
 STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "static")
 ]
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-MEDIA_URL= "media/"  # note: no leading slash!
+MEDIA_URL= "/media/"
+
+if _HAS_WHITENOISE:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 import socket
 CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
@@ -148,7 +171,11 @@ if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', '0') == '1'
+
+public_url = os.environ.get('PUBLIC_URL')
+if public_url:
+    CSRF_TRUSTED_ORIGINS = [public_url]
 
 LOGIN_URL = "mini_insta:login"
 LOGIN_REDIRECT_URL = "mini_insta:my_profile"   # where to land after login
