@@ -161,12 +161,12 @@ MEDIA_URL= "/media/"
 if _HAS_WHITENOISE:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-import socket
-CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
+#import socket
+#CS_DEPLOYMENT_HOSTNAME = 'cs-webapps.bu.edu'
 
-if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
-    STATIC_URL = '/gjin/static/'
-    MEDIA_URL = '/gjin/media/'
+#if socket.gethostname() == CS_DEPLOYMENT_HOSTNAME:
+#    STATIC_URL = '/gjin/static/'
+#    MEDIA_URL = '/gjin/media/'
 
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
