@@ -1,0 +1,28 @@
+databases:
+  - name: coachknight-db
+    databaseName: coachknight
+    user: coachknight
+    plan: free
+
+services:
+  - type: web
+    name: coachknight
+    runtime: python
+    plan: free
+    rootDir: coachknight
+    buildCommand: ./build.sh
+    startCommand: gunicorn coachknight.wsgi:application
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: coachknight-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "0"
+      - key: PUBLIC_URL
+        fromService:
+          type: web
+          name: coachknight
+          property: url
