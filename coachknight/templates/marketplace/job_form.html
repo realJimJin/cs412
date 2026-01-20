@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if job %}Edit Job{% else %}Post a Job{% endif %} - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>{% if job %}Edit Job{% else %}Post a New Job{% endif %}</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    
+    <p><label>Job Title *</label><br>
+    <input type="text" name="title" value="{{ job.title|default:'' }}" required></p>
+    
+    <p><label>Description</label><br>
+    <textarea name="description" rows="4">{{ job.description|default:'' }}</textarea></p>
+    
+    <p><label>Town/Location</label><br>
+    <select name="town">
+        <option value="">-- Select Town --</option>
+        {% for town in towns %}
+            <option value="{{ town.pk }}" {% if job.town_id == town.pk %}selected{% endif %}>{{ town.name }}</option>
+        {% endfor %}
+    </select></p>
+    
+    <p><label>Age Group</label><br>
+    <select name="age_group">
+        <option value="">-- Select --</option>
+        <option value="k2" {% if job.age_group == 'k2' %}selected{% endif %}>K-2</option>
+        <option value="35" {% if job.age_group == '35' %}selected{% endif %}>3-5</option>
+        <option value="68" {% if job.age_group == '68' %}selected{% endif %}>6-8</option>
+        <option value="hs" {% if job.age_group == 'hs' %}selected{% endif %}>High School</option>
+        <option value="mixed" {% if job.age_group == 'mixed' %}selected{% endif %}>Mixed</option>
+    </select></p>
+    
+    <p><label>Number of Students</label><br>
+    <input type="number" name="num_students" value="{{ job.num_students|default:10 }}" min="1"></p>
+    
+    <p><label>Day of Week</label><br>
+    <select name="day_of_week">
+        <option value="">-- Select --</option>
+        <option value="mon" {% if job.day_of_week == 'mon' %}selected{% endif %}>Monday</option>
+        <option value="tue" {% if job.day_of_week == 'tue' %}selected{% endif %}>Tuesday</option>
+        <option value="wed" {% if job.day_of_week == 'wed' %}selected{% endif %}>Wednesday</option>
+        <option value="thu" {% if job.day_of_week == 'thu' %}selected{% endif %}>Thursday</option>
+        <option value="fri" {% if job.day_of_week == 'fri' %}selected{% endif %}>Friday</option>
+        <option value="sat" {% if job.day_of_week == 'sat' %}selected{% endif %}>Saturday</option>
+        <option value="sun" {% if job.day_of_week == 'sun' %}selected{% endif %}>Sunday</option>
+    </select></p>
+    
+    <p><label>Start Time</label><br>
+    <input type="time" name="start_time" value="{{ job.start_time|default:'' }}"></p>
+    
+    <p><label>End Time</label><br>
+    <input type="time" name="end_time" value="{{ job.end_time|default:'' }}"></p>
+    
+    <p><label>Pay Rate Min ($/hr)</label><br>
+    <input type="number" name="pay_rate_min" value="{{ job.pay_rate_min|default:'' }}" min="0"></p>
+    
+    <p><label>Pay Rate Max ($/hr)</label><br>
+    <input type="number" name="pay_rate_max" value="{{ job.pay_rate_max|default:'' }}" min="0"></p>
+    
+    {% if job %}
+    <p><label><input type="checkbox" name="is_active" {% if job.is_active %}checked{% endif %}> Active (visible to coaches)</label></p>
+    {% endif %}
+    
+    <div class="button-row">
+        <input type="submit" value="{% if job %}Update Job{% else %}Post Job{% endif %}">
+        <a href="{% url 'marketplace:vendor_dashboard' %}" class="button-like">Cancel</a>
+    </div>
+</form>
+{% endblock %}

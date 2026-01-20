@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Search Coaches - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>Browse Coaches</h1>
+
+<main class="grid profile-grid">
+    {% for coach in coaches %}
+        <div class="profile-item">
+            <a href="{% url 'marketplace:coach_detail' coach.pk %}">
+                {% if coach.profile_image %}
+                    <img src="{{ coach.profile_image.url }}" alt="{{ coach.display_name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/200?text={{ coach.display_name|slice:':1' }}" alt="{{ coach.display_name }}">
+                {% endif %}
+            </a>
+            <div class="profile-header-item" style="margin-top: .5rem;">
+                <a href="{% url 'marketplace:coach_detail' coach.pk %}">
+                    <strong>{{ coach.display_name }}</strong>
+                </a>
+                <br>{{ coach.school_affiliation|default:"Chess Coach" }}
+                {% if coach.rating_rapid %}
+                    <br>Rating: {{ coach.rating_rapid }}
+                {% endif %}
+                {% if coach.actively_looking %}
+                    <br>✅ Available
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p>No coaches available yet.</p>
+    {% endfor %}
+</main>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block title %}Vendor Dashboard - CoachKnight{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">{{ vendor_profile.organization_name }}</h1>
+        <p class="text-gray-600 mt-2">Manage your organization and job postings</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <!-- Organization Info -->
+        <div class="card">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Organization Details</h2>
+            <div class="space-y-3">
+                <div>
+                    <span class="text-gray-600">Contact Person:</span>
+                    <div class="font-medium">{{ vendor_profile.contact_name }}</div>
+                </div>
+                <div>
+                    <span class="text-gray-600">Email:</span>
+                    <div class="font-medium">{{ vendor_profile.email }}</div>
+                </div>
+                {% if vendor_profile.website %}
+                    <div>
+                        <span class="text-gray-600">Website:</span>
+                        <div class="font-medium">
+                            <a href="{{ vendor_profile.website }}" target="_blank" class="text-blue-600 hover:text-blue-800">
+                                {{ vendor_profile.website }}
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+            <div class="space-y-3">
+                <a href="{% url 'marketplace:job_create' %}" class="block p-3 border border-gray-200 rounded hover:bg-gray-50">
+                    <h3 class="font-medium text-gray-900">Post New Job</h3>
+                    <p class="text-sm text-gray-600">Create a new coaching position</p>
+                </a>
+                <a href="{% url 'marketplace:search' %}" class="block p-3 border border-gray-200 rounded hover:bg-gray-50">
+                    <h3 class="font-medium text-gray-900">Search Coaches</h3>
+                    <p class="text-sm text-gray-600">Find qualified chess coaches</p>
+                </a>
+                <a href="{% url 'marketplace:job_list' %}" class="block p-3 border border-gray-200 rounded hover:bg-gray-50">
+                    <h3 class="font-medium text-gray-900">Manage Jobs</h3>
+                    <p class="text-sm text-gray-600">View and edit job postings</p>
+                </a>
+                <a href="{% url 'messaging:inbox' %}" class="block p-3 border border-gray-200 rounded hover:bg-gray-50">
+                    <h3 class="font-medium text-gray-900">Messages</h3>
+                    <p class="text-sm text-gray-600">Communicate with coaches</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Job Postings -->
+    <div class="mt-8">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-900">Recent Job Postings</h2>
+            <a href="{% url 'marketplace:job_create' %}" class="btn btn-primary">Post New Job</a>
+        </div>
+        
+        {% if vendor_profile.job_posts.exists %}
+            <div class="space-y-4">
+                {% for job in vendor_profile.job_posts.all|slice:":5" %}
+                    <div class="card">
+                        <div class="flex justify-between items-start">
+                            <div class="flex-grow">
+                                <h3 class="text-lg font-medium text-gray-900">{{ job.title }}</h3>
+                                <p class="text-gray-600 mt-1">{{ job.town.name }}</p>
+                                <p class="text-sm text-gray-500 mt-2">
+                                    {{ job.get_age_group_display }} • {{ job.num_students }} students
+                                    {% if job.pay_rate_min and job.pay_rate_max %}
+                                        • ${{ job.pay_rate_min }}-{{ job.pay_rate_max }}/hr
+                                    {% elif job.pay_rate_min %}
+                                        • ${{ job.pay_rate_min }}/hr
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="ml-4">
+                                {% if job.is_active %}
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">Active</span>
+                                {% else %}
+                                    <span class="px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm">Inactive</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="mt-3 flex gap-2">
+                            <a href="{% url 'marketplace:job_detail' job.pk %}" class="btn btn-outline">View</a>
+                            <a href="{% url 'marketplace:job_edit' job.pk %}" class="btn btn-secondary">Edit</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            {% if vendor_profile.job_posts.count > 5 %}
+                <div class="mt-4 text-center">
+                    <a href="{% url 'marketplace:job_list' %}" class="text-blue-600 hover:text-blue-800">
+                        View all {{ vendor_profile.job_posts.count }} job postings →
+                    </a>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="card text-center py-8">
+                <p class="text-gray-600 mb-4">You haven't posted any jobs yet.</p>
+                <a href="{% url 'marketplace:job_create' %}" class="btn btn-primary">Post Your First Job</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

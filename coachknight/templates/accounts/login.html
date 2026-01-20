@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>Log In</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <p><label>Username</label><br>
+    <input type="text" name="username" required autofocus></p>
+    
+    <p><label>Password</label><br>
+    <input type="password" name="password" required></p>
+    
+    <div class="button-row">
+        <input type="submit" value="Log In">
+    </div>
+</form>
+
+<hr style="margin: 2rem 0;">
+<p>Don't have an account? <a href="{% url 'accounts:signup' %}">Sign up</a></p>
+{% endblock %}

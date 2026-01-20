@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}CoachKnight - Chess Coach Marketplace{% endblock %}
+
+{% block content %}
+<h1>♞ CoachKnight</h1>
+<p>Connecting chess coaches with schools and programs in the Boston area.</p>
+
+<div class="button-row" style="margin-top: 1.5rem;">
+    <a href="{% url 'accounts:signup' %}?role=coach" class="button-like">I'm a Coach</a>
+    <a href="{% url 'accounts:signup' %}?role=vendor" class="button-like">I'm Hiring</a>
+</div>
+
+<hr style="margin: 2rem 0;">
+
+<h2>Browse Coaches</h2>
+<main class="grid profile-grid">
+    {% for coach in coaches %}
+        <div class="profile-item">
+            <a href="{% url 'marketplace:coach_detail' coach.pk %}">
+                {% if coach.profile_image %}
+                    <img src="{{ coach.profile_image.url }}" alt="{{ coach.display_name }}">
+                {% else %}
+                    <img src="https://via.placeholder.com/200?text={{ coach.display_name|slice:':1' }}" alt="{{ coach.display_name }}">
+                {% endif %}
+            </a>
+            <div class="profile-header-item" style="margin-top: .5rem;">
+                <a href="{% url 'marketplace:coach_detail' coach.pk %}">
+                    <strong>{{ coach.display_name }}</strong>
+                </a>
+                <br>{{ coach.school_affiliation|default:"Chess Coach" }}
+                {% if coach.rating_rapid %}
+                    <br>Rating: {{ coach.rating_rapid }}
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p>No coaches yet. <a href="{% url 'accounts:signup' %}?role=coach">Be the first to sign up!</a></p>
+    {% endfor %}
+</main>
+
+<hr style="margin: 2rem 0;">
+
+<h2>Latest Job Postings</h2>
+<main class="grid post-grid">
+    {% for job in jobs %}
+        <div class="post-item">
+            <div class="profile-header-item">
+                <a href="{% url 'marketplace:job_detail' job.pk %}">
+                    <strong>{{ job.title }}</strong>
+                </a>
+                <br>{{ job.vendor.organization_name }}
+                {% if job.town %}
+                    <br>📍 {{ job.town.name }}
+                {% endif %}
+                {% if job.pay_rate_min %}
+                    <br>💰 ${{ job.pay_rate_min }}{% if job.pay_rate_max %}-${{ job.pay_rate_max }}{% endif %}/hr
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p>No jobs posted yet. <a href="{% url 'accounts:signup' %}?role=vendor">Post your first job!</a></p>
+    {% endfor %}
+</main>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>{{ job.title }}</h1>
+
+<main class="grid profile-header">
+    <div class="profile-info">
+        <div class="profile-header-item">
+            <h2>{{ job.vendor.organization_name }}</h2>
+            {% if job.town %}
+                <p>📍 {{ job.town.name }}</p>
+            {% endif %}
+        </div>
+
+        {% if job.description %}
+        <div class="profile-header-item">
+            <p>{{ job.description }}</p>
+        </div>
+        {% endif %}
+
+        <div class="profile-header-item">
+            <strong>Details:</strong><br>
+            {% if job.age_group %}Age Group: {{ job.get_age_group_display }}<br>{% endif %}
+            {% if job.num_students %}Students: {{ job.num_students }}<br>{% endif %}
+            {% if job.day_of_week %}Day: {{ job.get_day_of_week_display }}<br>{% endif %}
+            {% if job.start_time and job.end_time %}Time: {{ job.start_time }} - {{ job.end_time }}<br>{% endif %}
+        </div>
+
+        {% if job.pay_rate_min or job.pay_rate_max %}
+        <div class="profile-header-item">
+            <strong>Pay Rate:</strong>
+            {% if job.pay_rate_min and job.pay_rate_max %}
+                ${{ job.pay_rate_min }} - ${{ job.pay_rate_max }}/hr
+            {% elif job.pay_rate_min %}
+                ${{ job.pay_rate_min }}+/hr
+            {% else %}
+                Up to ${{ job.pay_rate_max }}/hr
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="profile-header-item">
+            <small>Posted: {{ job.created_at|date:"M d, Y" }}</small>
+        </div>
+
+        {% if request.user.is_authenticated %}
+            {% if request.user.userprofile.is_coach %}
+                <div class="button-row" style="margin-top: 1rem;">
+                    <a href="{% url 'messaging:start_vendor_thread' job.vendor.pk %}" class="button-like">Apply / Message</a>
+                </div>
+            {% elif request.user.userprofile.is_vendor and job.vendor.user_profile == request.user.userprofile %}
+                <div class="button-row" style="margin-top: 1rem;">
+                    <a href="{% url 'marketplace:job_edit' job.pk %}" class="button-like">Edit Job</a>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

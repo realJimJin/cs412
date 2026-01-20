@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ coach.display_name }} - CoachKnight{% endblock %}
+
+{% block content %}
+<main class="grid profile-header">
+
+    <!-- Profile image -->
+    <div class="profile-image">
+        {% if coach.profile_image %}
+            <img src="{{ coach.profile_image.url }}" alt="{{ coach.display_name }}">
+        {% else %}
+            <img src="https://via.placeholder.com/200?text={{ coach.display_name|slice:':1' }}" alt="{{ coach.display_name }}">
+        {% endif %}
+    </div>
+
+    <!-- Profile info -->
+    <div class="profile-info">
+        <div class="profile-header-item">
+            <h2>{{ coach.display_name }}</h2>
+            <h3>{{ coach.school_affiliation|default:"Chess Coach" }}</h3>
+        </div>
+
+        <div class="profile-header-item">
+            <strong>{{ coach.get_grade_level_display }}</strong>
+            · {{ coach.years_experience }} years experience
+        </div>
+
+        {% if coach.rating_rapid or coach.rating_blitz %}
+        <div class="profile-header-item">
+            <strong>Chess Ratings:</strong>
+            {% if coach.rating_rapid %}Rapid: {{ coach.rating_rapid }}{% endif %}
+            {% if coach.rating_blitz %} · Blitz: {{ coach.rating_blitz }}{% endif %}
+            {% if coach.rating_bullet %} · Bullet: {{ coach.rating_bullet }}{% endif %}
+        </div>
+        {% endif %}
+
+        {% if coach.bio %}
+        <div class="profile-header-item">
+            <p>{{ coach.bio }}</p>
+        </div>
+        {% endif %}
+
+        <div class="profile-header-item">
+            {% if coach.has_car %}🚗 Has car{% endif %}
+            {% if coach.references_provided %} · ✓ References{% endif %}
+            {% if coach.experience_with_schools %} · 🏫 School experience{% endif %}
+            {% if coach.tournament_director_experience %} · 🏆 Tournament director{% endif %}
+        </div>
+
+        {% if coach.hourly_rate_min or coach.hourly_rate_max %}
+        <div class="profile-header-item">
+            <strong>Rate:</strong>
+            {% if coach.hourly_rate_min and coach.hourly_rate_max %}
+                ${{ coach.hourly_rate_min }} - ${{ coach.hourly_rate_max }}/hr
+            {% elif coach.hourly_rate_min %}
+                ${{ coach.hourly_rate_min }}+/hr
+            {% else %}
+                Up to ${{ coach.hourly_rate_max }}/hr
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if coach.actively_looking %}
+        <div class="profile-header-item" style="background-color: #d1fae5;">
+            ✅ Actively looking for opportunities
+        </div>
+        {% endif %}
+
+        {% if request.user.is_authenticated and request.user.userprofile.is_vendor %}
+        <div class="button-row" style="margin-top: 1rem;">
+            <a href="{% url 'messaging:start_thread' coach.pk %}" class="button-like">Message {{ coach.display_name }}</a>
+        </div>
+        {% endif %}
+    </div>
+
+</main>
+{% endblock %}

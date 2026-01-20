@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>Edit Coach Profile</h1>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <h2>Basic Information</h2>
+    
+    <p><label>Display Name *</label><br>
+    <input type="text" name="display_name" value="{{ coach_profile.display_name }}" required></p>
+    
+    <p><label>Grade Level *</label><br>
+    <select name="grade_level" required>
+        <option value="">Select Grade Level</option>
+        <option value="hs" {% if coach_profile.grade_level == 'hs' %}selected{% endif %}>High School</option>
+        <option value="college" {% if coach_profile.grade_level == 'college' %}selected{% endif %}>College</option>
+        <option value="other" {% if coach_profile.grade_level == 'other' %}selected{% endif %}>Other</option>
+    </select></p>
+    
+    <p><label>Bio</label><br>
+    <textarea name="bio" rows="4">{{ coach_profile.bio }}</textarea></p>
+    
+    <p><label>School/Affiliation</label><br>
+    <input type="text" name="school_affiliation" value="{{ coach_profile.school_affiliation }}"></p>
+    
+    <hr style="margin: 1.5rem 0;">
+    <h2>Chess Experience</h2>
+    
+    <p><label>Rapid Rating</label><br>
+    <input type="number" name="rating_rapid" value="{{ coach_profile.rating_rapid|default:'' }}"></p>
+    
+    <p><label>Blitz Rating</label><br>
+    <input type="number" name="rating_blitz" value="{{ coach_profile.rating_blitz|default:'' }}"></p>
+    
+    <p><label>Bullet Rating</label><br>
+    <input type="number" name="rating_bullet" value="{{ coach_profile.rating_bullet|default:'' }}"></p>
+    
+    <p><label>Rating Description</label><br>
+    <input type="text" name="rating_text" value="{{ coach_profile.rating_text }}" placeholder="e.g., Expert level (2000+)"></p>
+    
+    <p><label>Years of Experience</label><br>
+    <input type="number" name="years_experience" value="{{ coach_profile.years_experience }}" min="0"></p>
+    
+    <p><label>Age Groups Taught</label><br>
+    <input type="text" name="age_groups_taught" value="{{ coach_profile.age_groups_taught }}" placeholder="e.g., k2,35,68"></p>
+    
+    <hr style="margin: 1.5rem 0;">
+    <h2>Preferences</h2>
+    
+    <p><label>Hourly Rate Min ($)</label><br>
+    <input type="number" name="hourly_rate_min" value="{{ coach_profile.hourly_rate_min|default:'' }}" min="0"></p>
+    
+    <p><label>Hourly Rate Max ($)</label><br>
+    <input type="number" name="hourly_rate_max" value="{{ coach_profile.hourly_rate_max|default:'' }}" min="0"></p>
+    
+    <p><label>Max Travel Miles</label><br>
+    <input type="number" name="max_travel_miles" value="{{ coach_profile.max_travel_miles }}" min="0"></p>
+    
+    <p><label><input type="checkbox" name="has_car" {% if coach_profile.has_car %}checked{% endif %}> I have a car</label></p>
+    
+    <p><label><input type="checkbox" name="references_provided" {% if coach_profile.references_provided %}checked{% endif %}> References provided</label></p>
+    
+    <p><label><input type="checkbox" name="experience_with_schools" {% if coach_profile.experience_with_schools %}checked{% endif %}> Experience with schools</label></p>
+    
+    <p><label><input type="checkbox" name="tournament_director_experience" {% if coach_profile.tournament_director_experience %}checked{% endif %}> Tournament director experience</label></p>
+    
+    <p><label><input type="checkbox" name="actively_looking" {% if coach_profile.actively_looking %}checked{% endif %}> Actively looking for opportunities</label></p>
+    
+    <hr style="margin: 1.5rem 0;">
+    <h2>Contact Information</h2>
+    <p><small>This information is only shared when you choose to reveal it to a vendor</small></p>
+    
+    <p><label>Email</label><br>
+    <input type="email" name="email" value="{{ coach_profile.email }}"></p>
+    
+    <p><label>Phone</label><br>
+    <input type="tel" name="phone" value="{{ coach_profile.phone }}"></p>
+    
+    <div class="button-row">
+        <input type="submit" value="Save Profile">
+        <a href="{% url 'accounts:coach_profile' %}" class="button-like">Cancel</a>
+    </div>
+</form>
+{% endblock %}

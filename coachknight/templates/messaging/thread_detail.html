@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Message Thread - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>Conversation</h1>
+
+<div class="profile-header-item" style="margin-bottom: 1rem;">
+    {% if user.userprofile.is_coach %}
+        <strong>{{ thread.vendor.organization_name }}</strong>
+    {% else %}
+        <strong>{{ thread.coach.display_name }}</strong>
+    {% endif %}
+    {% if thread.job_post %}
+        <br>Re: {{ thread.job_post.title }}
+    {% endif %}
+</div>
+
+<div style="margin-bottom: 2rem;">
+    {% for message in messages %}
+        <div class="profile-header-item" style="margin-bottom: 0.5rem; {% if message.sender == user %}background-color: #eff6ff;{% endif %}">
+            <strong>{{ message.sender.username }}</strong>
+            <small>({{ message.created_at|date:"M d, g:i a" }})</small>
+            <p>{{ message.body }}</p>
+        </div>
+    {% empty %}
+        <p>No messages yet. Start the conversation!</p>
+    {% endfor %}
+</div>
+
+<form method="post" action="{% url 'messaging:send_message' thread.pk %}">
+    {% csrf_token %}
+    <p><label>Your Message</label><br>
+    <textarea name="body" rows="3" required></textarea></p>
+    
+    <div class="button-row">
+        <input type="submit" value="Send Message">
+    </div>
+</form>
+{% endblock %}

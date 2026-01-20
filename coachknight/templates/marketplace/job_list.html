@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Job Postings - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>Job Postings</h1>
+
+<main class="grid post-grid">
+    {% for job in jobs %}
+        <div class="post-item">
+            <div class="profile-header-item">
+                <a href="{% url 'marketplace:job_detail' job.pk %}">
+                    <strong>{{ job.title }}</strong>
+                </a>
+                <br>{{ job.vendor.organization_name }}
+                {% if job.town %}
+                    <br>📍 {{ job.town.name }}
+                {% endif %}
+                {% if job.pay_rate_min %}
+                    <br>💰 ${{ job.pay_rate_min }}{% if job.pay_rate_max %}-${{ job.pay_rate_max }}{% endif %}/hr
+                {% endif %}
+                {% if job.day_of_week %}
+                    <br>📅 {{ job.get_day_of_week_display }}
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <p>No jobs posted yet.</p>
+    {% endfor %}
+</main>
+{% endblock %}

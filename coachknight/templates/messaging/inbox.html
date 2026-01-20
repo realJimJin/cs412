@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Inbox - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>Messages</h1>
+
+<main class="grid post-grid">
+    {% for thread in threads %}
+        <div class="post-item">
+            <div class="profile-header-item">
+                <a href="{% url 'messaging:thread_detail' thread.pk %}">
+                    {% if user.userprofile.is_coach %}
+                        <strong>{{ thread.vendor.organization_name }}</strong>
+                    {% else %}
+                        <strong>{{ thread.coach.display_name }}</strong>
+                    {% endif %}
+                </a>
+                {% if thread.job_post %}
+                    <br>Re: {{ thread.job_post.title }}
+                {% endif %}
+                <br><small>{{ thread.updated_at|date:"M d, Y" }}</small>
+            </div>
+        </div>
+    {% empty %}
+        <p>No messages yet.</p>
+    {% endfor %}
+</main>
+{% endblock %}

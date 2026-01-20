@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CoachKnight{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="mb-6">
+        <h1 class="text-3xl font-bold text-gray-900">Welcome, {{ coach_profile.display_name }}!</h1>
+        <p class="text-gray-600 mt-2">Manage your coaching profile and availability</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6">
+        <!-- Profile Status -->
+        <div class="card">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Profile Status</h2>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Profile Completion</span>
+                    <span class="font-medium">
+                        {% if coach_profile.bio and coach_profile.school_affiliation %}
+                            Complete
+                        {% else %}
+                            Incomplete
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Actively Looking</span>
+                    <span class="font-medium">
+                        {% if coach_profile.actively_looking %}
+                            Yes
+                        {% else %}
+                            No
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Availability Slots</span>
+                    <span class="font-medium">{{ coach_profile.availability_slots.count }}</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Towns Served</span>
+                    <span class="font-medium">{{ coach_profile.coach_towns.count }}</span>
+                </div>
+            </div>
+            
+            <div class="mt-4 space-y-2">
+                <a href="{% url 'accounts:coach_profile' %}" class="btn btn-outline w-full">View Profile</a>
+                <a href="{% url 'accounts:coach_profile_edit' %}" class="btn btn-primary w-full">Edit Profile</a>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="card">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+            <div class="space-y-3">
+                <a href="{% url 'accounts:coach_profile_edit' %}#availability" class="block p-3 border border-gray-200 rounded hover:bg-gray-50">
+                    <h3 class="font-medium text-gray-900">Add Availability</h3>
+                    <p class="text-sm text-gray-600">Set your weekly schedule</p>
+                </a>
+                <a href="{% url 'accounts:coach_profile_edit' %}#towns" class="block p-3 border border-gray-200 rounded hover:bg-gray-50">
+                    <h3 class="font-medium text-gray-900">Add Towns</h3>
+                    <p class="text-sm text-gray-600">Specify areas you serve</p>
+                </a>
+                <a href="{% url 'messaging:inbox' %}" class="block p-3 border border-gray-200 rounded hover:bg-gray-50">
+                    <h3 class="font-medium text-gray-900">Check Messages</h3>
+                    <p class="text-sm text-gray-600">Respond to vendor inquiries</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    {% if coach_profile.availability_slots %}
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-900 mb-4">Current Availability</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for slot in coach_profile.availability_slots.all %}
+                    <div class="card p-4">
+                        <h3 class="font-medium text-gray-900">{{ slot.get_day_of_week_display }}</h3>
+                        <p class="text-gray-600">{{ slot.start_time }} - {{ slot.end_time }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - CoachKnight{% endblock %}
+
+{% block content %}
+<h1>{{ vendor_profile.organization_name }}</h1>
+<p>Welcome to your vendor dashboard!</p>
+
+<div class="button-row" style="margin-top: 1rem;">
+    <a href="{% url 'marketplace:job_create' %}" class="button-like">+ Post New Job</a>
+    <a href="{% url 'marketplace:search' %}" class="button-like">Search Coaches</a>
+</div>
+
+<hr style="margin: 2rem 0;">
+
+<h2>Your Job Postings</h2>
+<main class="grid post-grid">
+    {% for job in jobs %}
+        <div class="post-item">
+            <div class="profile-header-item">
+                <a href="{% url 'marketplace:job_detail' job.pk %}">
+                    <strong>{{ job.title }}</strong>
+                </a>
+                {% if job.town %}
+                    <br>📍 {{ job.town.name }}
+                {% endif %}
+                {% if job.is_active %}
+                    <br>✅ Active
+                {% else %}
+                    <br>❌ Inactive
+                {% endif %}
+                <br><small>Posted: {{ job.created_at|date:"M d, Y" }}</small>
+                <br>
+                <a href="{% url 'marketplace:job_edit' job.pk %}">Edit</a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No jobs posted yet. <a href="{% url 'marketplace:job_create' %}">Post your first job!</a></p>
+    {% endfor %}
+</main>
+{% endblock %}
