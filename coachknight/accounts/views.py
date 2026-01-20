@@ -102,6 +102,10 @@ def coach_profile_edit(request):
         if request.POST.get('rating_bullet'):
             coach_profile.rating_bullet = int(request.POST.get('rating_bullet'))
         
+        # Handle profile image upload
+        if 'profile_image' in request.FILES:
+            coach_profile.profile_image = request.FILES['profile_image']
+        
         coach_profile.save()
         messages.success(request, 'Profile updated successfully!')
         return redirect('accounts:coach_profile')

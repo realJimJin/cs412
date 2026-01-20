@@ -1,35 +1,40 @@
 {% extends 'base.html' %}
 
-{% block title %}Search Coaches - CoachKnight{% endblock %}
+{% block title %}Find Coaches - CoachKnight{% endblock %}
 
 {% block content %}
-<h1>Browse Coaches</h1>
-
-<main class="grid profile-grid">
-    {% for coach in coaches %}
-        <div class="profile-item">
-            <a href="{% url 'marketplace:coach_detail' coach.pk %}">
-                {% if coach.profile_image %}
-                    <img src="{{ coach.profile_image.url }}" alt="{{ coach.display_name }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/200?text={{ coach.display_name|slice:':1' }}" alt="{{ coach.display_name }}">
-                {% endif %}
+<section class="section" style="padding-top: 6rem;">
+    <div class="container">
+        <h1 class="text-center">Find Coaches</h1>
+        <p class="text-center text-muted mb-4">Browse our network of vetted chess instructors</p>
+        
+        <div class="card-grid">
+            {% for coach in coaches %}
+            <a href="{% url 'marketplace:coach_detail' coach.pk %}" style="text-decoration: none;">
+                <div class="profile-card">
+                    {% if coach.profile_image %}
+                        <img src="{{ coach.profile_image.url }}" alt="{{ coach.display_name }}" class="profile-card-image">
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ coach.display_name|urlencode }}&size=300&background=6366f1&color=fff" alt="{{ coach.display_name }}" class="profile-card-image">
+                    {% endif %}
+                    <div class="profile-card-content">
+                        <div class="profile-card-name">{{ coach.display_name }}</div>
+                        <div class="profile-card-subtitle">{{ coach.school_affiliation|default:"Chess Coach" }}</div>
+                        <div class="profile-card-meta">
+                            {% if coach.rating_rapid %}⭐ {{ coach.rating_rapid }} rated{% endif %}
+                            {% if coach.years_experience %} · {{ coach.years_experience }}yr exp{% endif %}
+                            {% if coach.actively_looking %}<br><span style="color: var(--success);">✓ Available</span>{% endif %}
+                        </div>
+                    </div>
+                </div>
             </a>
-            <div class="profile-header-item" style="margin-top: .5rem;">
-                <a href="{% url 'marketplace:coach_detail' coach.pk %}">
-                    <strong>{{ coach.display_name }}</strong>
-                </a>
-                <br>{{ coach.school_affiliation|default:"Chess Coach" }}
-                {% if coach.rating_rapid %}
-                    <br>Rating: {{ coach.rating_rapid }}
-                {% endif %}
-                {% if coach.actively_looking %}
-                    <br>✅ Available
-                {% endif %}
+            {% empty %}
+            <div class="text-center" style="grid-column: 1/-1;">
+                <p class="text-muted">No coaches available yet.</p>
+                <a href="{% url 'accounts:signup' %}?role=coach" class="btn btn-primary">Become a Coach</a>
             </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No coaches available yet.</p>
-    {% endfor %}
-</main>
+    </div>
+</section>
 {% endblock %}

@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-()5(rg$_%5r2ice+o$mc38b846f+6q&z9i(bd=kk4s#)w=1=r9')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', '0') == '1'
+DEBUG = os.environ.get('DEBUG', '1') == '1'
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.onrender.com']
 
@@ -145,12 +145,24 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# Media files (user uploads)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 if _HAS_WHITENOISE:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://127.0.0.1:8000',
+    'http://localhost:8000',
+]
+# Add any port for local dev (browser preview uses random ports)
+if DEBUG:
+    CSRF_TRUSTED_ORIGINS += [f'http://127.0.0.1:{port}' for port in range(50000, 60000)]
+
 public_url = os.environ.get('PUBLIC_URL')
 if public_url:
-    CSRF_TRUSTED_ORIGINS = [public_url]
+    CSRF_TRUSTED_ORIGINS.append(public_url)
 
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:dashboard'

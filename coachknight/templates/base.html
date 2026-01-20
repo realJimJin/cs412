@@ -8,35 +8,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-
-    {% block content %}{% endblock %}
-
-    <footer>
-        <hr>
-        <a href="{% url 'home' %}">← Home</a>
-
-        {% if user.is_authenticated %}
-            {% with user.userprofile as profile %}
-                {% if profile.is_coach %}
-                    · <a href="{% url 'accounts:coach_profile' %}">My Profile</a>
-                    · <a href="{% url 'accounts:coach_profile_edit' %}">Edit Profile</a>
-                {% elif profile.is_vendor %}
-                    · <a href="{% url 'marketplace:vendor_dashboard' %}">Dashboard</a>
-                    · <a href="{% url 'marketplace:job_create' %}">+ Post Job</a>
-                    · <a href="{% url 'marketplace:search' %}">Search Coaches</a>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="{% url 'home' %}" class="logo">
+                <span class="logo-icon">♞</span> CoachKnight
+            </a>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    {% with user.userprofile as profile %}
+                        {% if profile.is_coach %}
+                            <a href="{% url 'accounts:coach_profile' %}">My Profile</a>
+                            <a href="{% url 'messaging:inbox' %}">Messages</a>
+                        {% elif profile.is_vendor %}
+                            <a href="{% url 'marketplace:search' %}">Find Coaches</a>
+                            <a href="{% url 'marketplace:vendor_dashboard' %}">Dashboard</a>
+                            <a href="{% url 'messaging:inbox' %}">Messages</a>
+                        {% endif %}
+                    {% endwith %}
+                    <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}">Log in</a>
+                    <a href="{% url 'accounts:signup' %}" class="btn btn-primary" style="padding: 0.5rem 1rem;">Get Started</a>
                 {% endif %}
-            {% endwith %}
-            · <a href="{% url 'messaging:inbox' %}">Messages</a>
-            · <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" style="background:none;border:none;padding:0;margin:0;color:blue;cursor:pointer;">
-                    Logout
-                </button>
-            </form>
-        {% else %}
-            · <a href="{% url 'accounts:login' %}">Login</a>
-            · <a href="{% url 'accounts:signup' %}">Register</a>
-        {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">♞ CoachKnight</div>
+            <div>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'marketplace:search' %}">Find Coaches</a>
+                <a href="{% url 'marketplace:job_list' %}">Browse Jobs</a>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'accounts:signup' %}">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
     </footer>
 </body>
 </html>

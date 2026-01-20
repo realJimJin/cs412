@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import render
+from django.conf import settings
+from django.conf.urls.static import static
 
 def home(request):
     from marketplace.models import CoachProfile, JobPost
@@ -30,4 +32,4 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('marketplace/', include('marketplace.urls')),
     path('messaging/', include('messaging.urls')),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

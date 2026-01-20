@@ -3,78 +3,89 @@
 {% block title %}{{ coach_profile.display_name }} - CoachKnight{% endblock %}
 
 {% block content %}
-<main class="grid profile-header">
-
-    <!-- Profile image -->
-    <div class="profile-image">
-        {% if coach_profile.profile_image %}
-            <img src="{{ coach_profile.profile_image.url }}" alt="{{ coach_profile.display_name }}">
-        {% else %}
-            <img src="https://via.placeholder.com/200?text={{ coach_profile.display_name|slice:':1' }}" alt="{{ coach_profile.display_name }}">
-        {% endif %}
-    </div>
-
-    <!-- Profile info -->
-    <div class="profile-info">
-        <div class="profile-header-item">
-            <h2>{{ coach_profile.display_name }}</h2>
-            <h3>{{ coach_profile.school_affiliation|default:"Chess Coach" }}</h3>
-        </div>
-
-        <div class="profile-header-item">
-            <strong>{{ coach_profile.get_grade_level_display }}</strong>
-            · {{ coach_profile.years_experience }} years experience
-        </div>
-
-        {% if coach_profile.rating_rapid or coach_profile.rating_blitz %}
-        <div class="profile-header-item">
-            <strong>Chess Ratings:</strong>
-            {% if coach_profile.rating_rapid %}Rapid: {{ coach_profile.rating_rapid }}{% endif %}
-            {% if coach_profile.rating_blitz %} · Blitz: {{ coach_profile.rating_blitz }}{% endif %}
-            {% if coach_profile.rating_bullet %} · Bullet: {{ coach_profile.rating_bullet }}{% endif %}
-        </div>
-        {% endif %}
-
-        {% if coach_profile.bio %}
-        <div class="profile-header-item">
-            <p>{{ coach_profile.bio }}</p>
-        </div>
-        {% endif %}
-
-        <div class="profile-header-item">
-            {% if coach_profile.has_car %}🚗 Has car{% endif %}
-            {% if coach_profile.references_provided %} · ✓ References{% endif %}
-            {% if coach_profile.experience_with_schools %} · 🏫 School experience{% endif %}
-            {% if coach_profile.tournament_director_experience %} · 🏆 Tournament director{% endif %}
-        </div>
-
-        {% if coach_profile.hourly_rate_min or coach_profile.hourly_rate_max %}
-        <div class="profile-header-item">
-            <strong>Rate:</strong>
-            {% if coach_profile.hourly_rate_min and coach_profile.hourly_rate_max %}
-                ${{ coach_profile.hourly_rate_min }} - ${{ coach_profile.hourly_rate_max }}/hr
-            {% elif coach_profile.hourly_rate_min %}
-                ${{ coach_profile.hourly_rate_min }}+/hr
+<section class="section" style="padding-top: 6rem;">
+    <div class="container" style="max-width: 900px;">
+        
+        <!-- Profile Header -->
+        <div class="profile-header">
+            {% if coach_profile.profile_image %}
+                <img src="{{ coach_profile.profile_image.url }}" alt="{{ coach_profile.display_name }}" class="profile-avatar">
             {% else %}
-                Up to ${{ coach_profile.hourly_rate_max }}/hr
+                <img src="https://ui-avatars.com/api/?name={{ coach_profile.display_name|urlencode }}&size=150&background=6366f1&color=fff" alt="{{ coach_profile.display_name }}" class="profile-avatar">
             {% endif %}
+            
+            <div class="profile-info">
+                <h1>{{ coach_profile.display_name }}</h1>
+                <p class="profile-tagline">{{ coach_profile.school_affiliation|default:"Chess Coach" }}</p>
+                
+                <div class="profile-badges">
+                    {% if coach_profile.actively_looking %}
+                        <span class="badge badge-success">✓ Available</span>
+                    {% endif %}
+                    {% if coach_profile.rating_rapid %}
+                        <span class="badge badge-accent">⭐ {{ coach_profile.rating_rapid }} Rapid</span>
+                    {% endif %}
+                    {% if coach_profile.years_experience %}
+                        <span class="badge">{{ coach_profile.years_experience }} yrs exp</span>
+                    {% endif %}
+                    {% if coach_profile.has_car %}
+                        <span class="badge">🚗 Has car</span>
+                    {% endif %}
+                    {% if coach_profile.references_provided %}
+                        <span class="badge">✓ References</span>
+                    {% endif %}
+                    {% if coach_profile.experience_with_schools %}
+                        <span class="badge">🏫 School exp</span>
+                    {% endif %}
+                </div>
+                
+                {% if user.is_authenticated and user.userprofile.is_coach %}
+                <div style="margin-top: 1rem;">
+                    <a href="{% url 'accounts:coach_profile_edit' %}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{% url 'messaging:inbox' %}" class="btn btn-secondary">Messages</a>
+                </div>
+                {% endif %}
+            </div>
         </div>
-        {% endif %}
-
-        {% if coach_profile.actively_looking %}
-        <div class="profile-header-item" style="background-color: #d1fae5;">
-            ✅ Actively looking for opportunities
+        
+        <!-- Profile Details -->
+        <div class="card-grid" style="margin-top: 2rem;">
+            {% if coach_profile.bio %}
+            <div class="card" style="grid-column: 1 / -1;">
+                <h3>About</h3>
+                <p class="mb-0">{{ coach_profile.bio }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="card">
+                <h4>Chess Ratings</h4>
+                {% if coach_profile.rating_rapid %}<p class="mb-1"><strong>Rapid:</strong> {{ coach_profile.rating_rapid }}</p>{% endif %}
+                {% if coach_profile.rating_blitz %}<p class="mb-1"><strong>Blitz:</strong> {{ coach_profile.rating_blitz }}</p>{% endif %}
+                {% if coach_profile.rating_bullet %}<p class="mb-1"><strong>Bullet:</strong> {{ coach_profile.rating_bullet }}</p>{% endif %}
+                {% if coach_profile.rating_text %}<p class="mb-0 text-muted">{{ coach_profile.rating_text }}</p>{% endif %}
+                {% if not coach_profile.rating_rapid and not coach_profile.rating_blitz and not coach_profile.rating_bullet %}
+                    <p class="text-muted mb-0">Not specified</p>
+                {% endif %}
+            </div>
+            
+            <div class="card">
+                <h4>Rate & Availability</h4>
+                {% if coach_profile.hourly_rate_min or coach_profile.hourly_rate_max %}
+                <p class="mb-1"><strong>Hourly Rate:</strong> 
+                    {% if coach_profile.hourly_rate_min and coach_profile.hourly_rate_max %}
+                        ${{ coach_profile.hourly_rate_min }} - ${{ coach_profile.hourly_rate_max }}
+                    {% elif coach_profile.hourly_rate_min %}
+                        ${{ coach_profile.hourly_rate_min }}+
+                    {% else %}
+                        Up to ${{ coach_profile.hourly_rate_max }}
+                    {% endif %}
+                </p>
+                {% endif %}
+                <p class="mb-1"><strong>Travel Range:</strong> {{ coach_profile.max_travel_miles }} miles</p>
+                <p class="mb-0"><strong>Grade Level:</strong> {{ coach_profile.get_grade_level_display }}</p>
+            </div>
         </div>
-        {% endif %}
-
-        <!-- Owner actions -->
-        {% if user.is_authenticated and user.userprofile.is_coach %}
-        <div class="button-row" style="margin-top: 1rem;">
-            <a href="{% url 'accounts:coach_profile_edit' %}" class="button-like">Edit Profile</a>
-            <a href="{% url 'messaging:inbox' %}" class="button-like">Messages</a>
-        </div>
-        {% endif %}
+        
     </div>
-
-</main>
+</section>
 {% endblock %}

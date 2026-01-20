@@ -1,65 +1,129 @@
 {% extends 'base.html' %}
 
-{% block title %}CoachKnight - Chess Coach Marketplace{% endblock %}
+{% block title %}CoachKnight - Premium Chess Coach Marketplace{% endblock %}
 
 {% block content %}
-<h1>♞ CoachKnight</h1>
-<p>Connecting chess coaches with schools and programs in the Boston area.</p>
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>Better chess programs start with better coaches</h1>
+        <p class="hero-subtitle">
+            A premium chess coach sourcing platform. Skip the cold outreach and hire from our vetted network of passionate chess instructors.
+        </p>
+        <div class="hero-buttons">
+            <a href="{% url 'accounts:signup' %}?role=vendor" class="btn btn-primary">Find Coaches</a>
+            <a href="{% url 'accounts:signup' %}?role=coach" class="btn btn-secondary">I'm a Coach</a>
+        </div>
+    </div>
+</section>
 
-<div class="button-row" style="margin-top: 1.5rem;">
-    <a href="{% url 'accounts:signup' %}?role=coach" class="button-like">I'm a Coach</a>
-    <a href="{% url 'accounts:signup' %}?role=vendor" class="button-like">I'm Hiring</a>
-</div>
+<!-- How It Works -->
+<section class="section section-alt">
+    <div class="container text-center">
+        <h2>How It Works</h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Post your needs</h3>
+                <p>Tell us about your program, schedule, and the type of coach you're looking for.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Review matches</h3>
+                <p>Browse coach profiles with ratings, experience, and availability—all in one place.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Start teaching</h3>
+                <p>Connect with your chosen coach and launch your chess program.</p>
+            </div>
+        </div>
+    </div>
+</section>
 
-<hr style="margin: 2rem 0;">
-
-<h2>Browse Coaches</h2>
-<main class="grid profile-grid">
-    {% for coach in coaches %}
-        <div class="profile-item">
-            <a href="{% url 'marketplace:coach_detail' coach.pk %}">
-                {% if coach.profile_image %}
-                    <img src="{{ coach.profile_image.url }}" alt="{{ coach.display_name }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/200?text={{ coach.display_name|slice:':1' }}" alt="{{ coach.display_name }}">
-                {% endif %}
+<!-- Featured Coaches -->
+<section class="section">
+    <div class="container">
+        <h2 class="text-center">Featured Coaches</h2>
+        <p class="text-center text-muted mb-4">Vetted instructors ready to elevate your chess program</p>
+        
+        <div class="card-grid">
+            {% for coach in coaches %}
+            <a href="{% url 'marketplace:coach_detail' coach.pk %}" style="text-decoration: none;">
+                <div class="profile-card">
+                    {% if coach.profile_image %}
+                        <img src="{{ coach.profile_image.url }}" alt="{{ coach.display_name }}" class="profile-card-image">
+                    {% else %}
+                        <img src="https://ui-avatars.com/api/?name={{ coach.display_name|urlencode }}&size=300&background=6366f1&color=fff" alt="{{ coach.display_name }}" class="profile-card-image">
+                    {% endif %}
+                    <div class="profile-card-content">
+                        <div class="profile-card-name">{{ coach.display_name }}</div>
+                        <div class="profile-card-subtitle">{{ coach.school_affiliation|default:"Chess Coach" }}</div>
+                        <div class="profile-card-meta">
+                            {% if coach.rating_rapid %}⭐ {{ coach.rating_rapid }} rated{% endif %}
+                            {% if coach.years_experience %} · {{ coach.years_experience }}yr exp{% endif %}
+                        </div>
+                    </div>
+                </div>
             </a>
-            <div class="profile-header-item" style="margin-top: .5rem;">
-                <a href="{% url 'marketplace:coach_detail' coach.pk %}">
-                    <strong>{{ coach.display_name }}</strong>
-                </a>
-                <br>{{ coach.school_affiliation|default:"Chess Coach" }}
-                {% if coach.rating_rapid %}
-                    <br>Rating: {{ coach.rating_rapid }}
-                {% endif %}
+            {% empty %}
+            <div class="text-center" style="grid-column: 1/-1;">
+                <p class="text-muted">No coaches yet. <a href="{% url 'accounts:signup' %}?role=coach">Be the first to join!</a></p>
             </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No coaches yet. <a href="{% url 'accounts:signup' %}?role=coach">Be the first to sign up!</a></p>
-    {% endfor %}
-</main>
+        
+        {% if coaches %}
+        <div class="text-center mt-4">
+            <a href="{% url 'marketplace:search' %}" class="btn btn-outline">View All Coaches</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
 
-<hr style="margin: 2rem 0;">
-
-<h2>Latest Job Postings</h2>
-<main class="grid post-grid">
-    {% for job in jobs %}
-        <div class="post-item">
-            <div class="profile-header-item">
-                <a href="{% url 'marketplace:job_detail' job.pk %}">
-                    <strong>{{ job.title }}</strong>
-                </a>
-                <br>{{ job.vendor.organization_name }}
-                {% if job.town %}
-                    <br>📍 {{ job.town.name }}
-                {% endif %}
-                {% if job.pay_rate_min %}
-                    <br>💰 ${{ job.pay_rate_min }}{% if job.pay_rate_max %}-${{ job.pay_rate_max }}{% endif %}/hr
-                {% endif %}
+<!-- Latest Jobs -->
+<section class="section section-alt">
+    <div class="container">
+        <h2 class="text-center">Latest Opportunities</h2>
+        <p class="text-center text-muted mb-4">Schools and programs looking for chess coaches</p>
+        
+        <div class="card-grid">
+            {% for job in jobs %}
+            <a href="{% url 'marketplace:job_detail' job.pk %}" style="text-decoration: none;">
+                <div class="job-card">
+                    <div class="job-card-title">{{ job.title }}</div>
+                    <div class="job-card-company">{{ job.vendor.organization_name }}</div>
+                    <div class="job-card-details">
+                        {% if job.town %}<span class="job-card-tag">📍 {{ job.town.name }}</span>{% endif %}
+                        {% if job.pay_rate_min %}<span class="job-card-tag">💰 ${{ job.pay_rate_min }}{% if job.pay_rate_max %}-${{ job.pay_rate_max }}{% endif %}/hr</span>{% endif %}
+                        {% if job.day_of_week %}<span class="job-card-tag">📅 {{ job.get_day_of_week_display }}</span>{% endif %}
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="text-center" style="grid-column: 1/-1;">
+                <p class="text-muted">No jobs posted yet. <a href="{% url 'accounts:signup' %}?role=vendor">Post your first opportunity!</a></p>
             </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No jobs posted yet. <a href="{% url 'accounts:signup' %}?role=vendor">Post your first job!</a></p>
-    {% endfor %}
-</main>
+        
+        {% if jobs %}
+        <div class="text-center mt-4">
+            <a href="{% url 'marketplace:job_list' %}" class="btn btn-outline">View All Jobs</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section">
+    <div class="container text-center">
+        <h2>Ready to get started?</h2>
+        <p class="text-muted mb-4">Join CoachKnight today and connect with the chess community.</p>
+        <div class="hero-buttons">
+            <a href="{% url 'accounts:signup' %}?role=vendor" class="btn btn-primary">I'm Hiring Coaches</a>
+            <a href="{% url 'accounts:signup' %}?role=coach" class="btn btn-secondary">I'm a Coach</a>
+        </div>
+    </div>
+</section>
 {% endblock %}

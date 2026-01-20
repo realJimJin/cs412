@@ -3,29 +3,31 @@
 {% block title %}Job Postings - CoachKnight{% endblock %}
 
 {% block content %}
-<h1>Job Postings</h1>
-
-<main class="grid post-grid">
-    {% for job in jobs %}
-        <div class="post-item">
-            <div class="profile-header-item">
-                <a href="{% url 'marketplace:job_detail' job.pk %}">
-                    <strong>{{ job.title }}</strong>
-                </a>
-                <br>{{ job.vendor.organization_name }}
-                {% if job.town %}
-                    <br>📍 {{ job.town.name }}
-                {% endif %}
-                {% if job.pay_rate_min %}
-                    <br>💰 ${{ job.pay_rate_min }}{% if job.pay_rate_max %}-${{ job.pay_rate_max }}{% endif %}/hr
-                {% endif %}
-                {% if job.day_of_week %}
-                    <br>📅 {{ job.get_day_of_week_display }}
-                {% endif %}
+<section class="section" style="padding-top: 6rem;">
+    <div class="container">
+        <h1 class="text-center">Job Opportunities</h1>
+        <p class="text-center text-muted mb-4">Schools and programs looking for chess coaches</p>
+        
+        <div class="card-grid">
+            {% for job in jobs %}
+            <a href="{% url 'marketplace:job_detail' job.pk %}" style="text-decoration: none;">
+                <div class="job-card">
+                    <div class="job-card-title">{{ job.title }}</div>
+                    <div class="job-card-company">{{ job.vendor.organization_name }}</div>
+                    <div class="job-card-details">
+                        {% if job.town %}<span class="job-card-tag">📍 {{ job.town.name }}</span>{% endif %}
+                        {% if job.pay_rate_min %}<span class="job-card-tag">💰 ${{ job.pay_rate_min }}{% if job.pay_rate_max %}-${{ job.pay_rate_max }}{% endif %}/hr</span>{% endif %}
+                        {% if job.day_of_week %}<span class="job-card-tag">📅 {{ job.get_day_of_week_display }}</span>{% endif %}
+                    </div>
+                </div>
+            </a>
+            {% empty %}
+            <div class="text-center" style="grid-column: 1/-1;">
+                <p class="text-muted">No jobs posted yet.</p>
+                <a href="{% url 'accounts:signup' %}?role=vendor" class="btn btn-primary">Post a Job</a>
             </div>
+            {% endfor %}
         </div>
-    {% empty %}
-        <p>No jobs posted yet.</p>
-    {% endfor %}
-</main>
+    </div>
+</section>
 {% endblock %}

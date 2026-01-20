@@ -3,39 +3,58 @@
 {% block title %}Sign Up - CoachKnight{% endblock %}
 
 {% block content %}
-<h1>Sign Up</h1>
-
-{% if selected_role %}
-    <div class="profile-header-item" style="margin-bottom: 1rem;">
-        <p>Creating account as: <strong>{{ selected_role|title }}</strong></p>
-        <a href="{% url 'accounts:signup' %}">Change role</a>
+<section class="hero" style="min-height: 80vh;">
+    <div class="container" style="max-width: 500px;">
+        <h1 style="font-size: 2.5rem;">Get Started</h1>
+        
+        {% if selected_role %}
+            <div class="card" style="text-align: left; margin-top: 2rem;">
+                <p class="text-muted mb-2">Creating account as: <strong style="color: var(--accent);">{{ selected_role|title }}</strong> 
+                    <a href="{% url 'accounts:signup' %}" style="font-size: 0.875rem;">Change</a>
+                </p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="role" value="{{ selected_role }}">
+                    
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" required placeholder="Choose a username">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password1" required placeholder="Create a password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="password2" required placeholder="Confirm your password">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                </form>
+            </div>
+        {% else %}
+            <p class="hero-subtitle">Join CoachKnight as a coach or find coaches for your program.</p>
+            
+            <div class="card-grid" style="margin-top: 2rem;">
+                <a href="{% url 'accounts:signup' %}?role=coach" class="card text-center" style="text-decoration: none;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">♟️</div>
+                    <h3>I'm a Coach</h3>
+                    <p class="text-muted mb-0">Create a profile and get discovered by schools and programs.</p>
+                </a>
+                <a href="{% url 'accounts:signup' %}?role=vendor" class="card text-center" style="text-decoration: none;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
+                    <h3>I'm Hiring</h3>
+                    <p class="text-muted mb-0">Find and connect with qualified chess coaches.</p>
+                </a>
+            </div>
+        {% endif %}
+        
+        <p class="text-center mt-4 text-muted">
+            Already have an account? <a href="{% url 'accounts:login' %}">Log in</a>
+        </p>
     </div>
-
-    <form method="post">
-        {% csrf_token %}
-        <input type="hidden" name="role" value="{{ selected_role }}">
-        
-        <p><label>Username *</label><br>
-        <input type="text" name="username" required></p>
-        
-        <p><label>Password *</label><br>
-        <input type="password" name="password1" required></p>
-        
-        <p><label>Confirm Password *</label><br>
-        <input type="password" name="password2" required></p>
-        
-        <div class="button-row">
-            <input type="submit" value="Create Account">
-        </div>
-    </form>
-{% else %}
-    <p>I am a:</p>
-    <div class="button-row" style="margin-top: 1rem;">
-        <a href="{% url 'accounts:signup' %}?role=coach" class="button-like">Chess Coach</a>
-        <a href="{% url 'accounts:signup' %}?role=vendor" class="button-like">School/Program</a>
-    </div>
-{% endif %}
-
-<hr style="margin: 2rem 0;">
-<p>Already have an account? <a href="{% url 'accounts:login' %}">Log in</a></p>
+</section>
 {% endblock %}
