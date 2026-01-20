@@ -21,8 +21,5 @@ services:
         generateValue: true
       - key: DEBUG
         value: "0"
-      - key: PUBLIC_URL
-        fromService:
-          type: web
-          name: coachknight
-          property: url
+      - key: PYTHON_VERSION
+        value: "3.11.4"
