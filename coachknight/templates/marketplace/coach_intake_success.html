@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}You're In! - CoachKnight{% endblock %}
+
+{% block content %}
+<section class="hero" style="min-height: 80vh;">
+    <div class="container" style="max-width: 500px; text-align: center;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">🎉</div>
+        <h1 style="font-size: 2.5rem;">You're In!</h1>
+        <p class="hero-subtitle">Thanks for joining CoachKnight. We're reviewing your application.</p>
+        
+        <div class="card" style="text-align: left; margin-top: 2rem;">
+            <h3 style="margin-bottom: 1rem;">What happens next?</h3>
+            <ol style="padding-left: 1.25rem; color: var(--text-muted);">
+                <li style="margin-bottom: 0.75rem;">We'll review your profile (usually within 24-48 hours)</li>
+                <li style="margin-bottom: 0.75rem;">Once approved, you'll appear in our coach directory</li>
+                <li style="margin-bottom: 0.75rem;">Schools and programs will reach out when they have matching opportunities</li>
+            </ol>
+            
+            <p class="text-muted" style="font-size: 0.875rem; margin-top: 1.5rem;">
+                Questions? Email us at <a href="mailto:hello@coachknight.com">hello@coachknight.com</a>
+            </p>
+        </div>
+        
+        <a href="{% url 'marketplace:coach_dashboard' %}" class="btn btn-primary" style="margin-top: 1.5rem;">View Your Dashboard</a>
+    </div>
+</section>
+{% endblock %}

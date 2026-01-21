@@ -22,6 +22,24 @@ class CoachProfile(models.Model):
         ('68', '6-8'),
         ('912', '9-12'),
     ]
+    RATING_RANGE_CHOICES = [
+        ('under1000', 'Under 1000'),
+        ('1000-1400', '1000-1400'),
+        ('1400-1800', '1400-1800'),
+        ('1800-2200', '1800-2200'),
+        ('2200+', '2200+'),
+        ('unrated', 'Unrated/Casual'),
+    ]
+    STATUS_CHOICES = [
+        ('new', 'New'),
+        ('approved', 'Approved'),
+        ('rejected', 'Rejected'),
+    ]
+    AVAILABILITY_CHOICES = [
+        ('weekday_afternoon', 'Weekday Afternoons'),
+        ('weekday_evening', 'Weekday Evenings'),
+        ('weekend', 'Weekends'),
+    ]
     
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE)
     display_name = models.CharField(max_length=100)
@@ -59,6 +77,18 @@ class CoachProfile(models.Model):
     # Contact info (hidden by default)
     email = models.EmailField(blank=True)
     phone = models.CharField(max_length=20, blank=True)
+    
+    # New intake fields
+    town = models.CharField(max_length=100, blank=True)
+    zip_code = models.CharField(max_length=10, blank=True)
+    availability = models.CharField(max_length=100, blank=True, help_text="Comma-separated: weekday_afternoon,weekday_evening,weekend")
+    chesscom_username = models.CharField(max_length=50, blank=True)
+    lichess_username = models.CharField(max_length=50, blank=True)
+    rating_range = models.CharField(max_length=20, choices=RATING_RANGE_CHOICES, blank=True)
+    teaching_experience = models.TextField(blank=True)
+    
+    # Approval status
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='new')
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -149,6 +179,29 @@ class JobPost(models.Model):
 
     def __str__(self):
         return f"{self.title} at {self.vendor.organization_name}"
+
+class VendorWaitlistEntry(models.Model):
+    STATUS_CHOICES = [
+        ('new', 'New'),
+        ('contacted', 'Contacted'),
+        ('converted', 'Converted'),
+    ]
+    
+    org_name = models.CharField(max_length=200)
+    contact_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20, blank=True)
+    towns = models.CharField(max_length=200, help_text="Towns/areas they need coaches for")
+    needs_text = models.TextField(help_text="What they're looking for")
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='new')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.org_name} - {self.contact_name}"
+    
+    class Meta:
+        verbose_name_plural = "Vendor waitlist entries"
+
 
 class VendorCoachStatus(models.Model):
     STATUS_CHOICES = [

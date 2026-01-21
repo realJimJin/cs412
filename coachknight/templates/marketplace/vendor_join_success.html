@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Request Received - CoachKnight{% endblock %}
+
+{% block content %}
+<section class="hero" style="min-height: 80vh;">
+    <div class="container" style="max-width: 500px; text-align: center;">
+        <div style="font-size: 4rem; margin-bottom: 1rem;">✅</div>
+        <h1 style="font-size: 2.5rem;">Request Received!</h1>
+        <p class="hero-subtitle">Thanks for reaching out. We'll be in touch within 24-48 hours.</p>
+        
+        <div class="card" style="text-align: left; margin-top: 2rem;">
+            <h3 style="margin-bottom: 1rem;">What happens next?</h3>
+            <ol style="padding-left: 1.25rem; color: var(--text-muted);">
+                <li style="margin-bottom: 0.75rem;">We'll review your request and identify matching coaches</li>
+                <li style="margin-bottom: 0.75rem;">We'll reach out via email to discuss your needs</li>
+                <li style="margin-bottom: 0.75rem;">Once we find a match, we'll make introductions</li>
+            </ol>
+        </div>
+        
+        <a href="{% url 'home' %}" class="btn btn-secondary" style="margin-top: 1.5rem;">Back to Home</a>
+    </div>
+</section>
+{% endblock %}

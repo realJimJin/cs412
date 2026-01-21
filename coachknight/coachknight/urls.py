@@ -22,7 +22,8 @@ from django.conf.urls.static import static
 
 def home(request):
     from marketplace.models import CoachProfile, JobPost
-    coaches = CoachProfile.objects.filter(actively_looking=True).order_by('-created_at')[:8]
+    # Only show APPROVED coaches who are actively looking
+    coaches = CoachProfile.objects.filter(actively_looking=True, status='approved').order_by('-created_at')[:8]
     jobs = JobPost.objects.filter(is_active=True).order_by('-created_at')[:8]
     return render(request, 'home.html', {'coaches': coaches, 'jobs': jobs})
 

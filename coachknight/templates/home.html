@@ -11,8 +11,8 @@
             A premium chess coach sourcing platform. Skip the cold outreach and hire from our vetted network of passionate chess instructors.
         </p>
         <div class="hero-buttons">
-            <a href="{% url 'accounts:signup' %}?role=vendor" class="btn btn-primary">Find Coaches</a>
-            <a href="{% url 'accounts:signup' %}?role=coach" class="btn btn-secondary">I'm a Coach</a>
+            <a href="{% url 'marketplace:vendor_join' %}" class="btn btn-primary">Find Coaches</a>
+            <a href="{% url 'marketplace:coach_join' %}" class="btn btn-secondary">I'm a Coach</a>
         </div>
     </div>
 </section>
@@ -47,6 +47,7 @@
         <h2 class="text-center">Featured Coaches</h2>
         <p class="text-center text-muted mb-4">Vetted instructors ready to elevate your chess program</p>
         
+        {% if coaches %}
         <div class="card-grid">
             {% for coach in coaches %}
             <a href="{% url 'marketplace:coach_detail' coach.pk %}" style="text-decoration: none;">
@@ -66,16 +67,18 @@
                     </div>
                 </div>
             </a>
-            {% empty %}
-            <div class="text-center" style="grid-column: 1/-1;">
-                <p class="text-muted">No coaches yet. <a href="{% url 'accounts:signup' %}?role=coach">Be the first to join!</a></p>
-            </div>
             {% endfor %}
         </div>
-        
-        {% if coaches %}
         <div class="text-center mt-4">
             <a href="{% url 'marketplace:search' %}" class="btn btn-outline">View All Coaches</a>
+        </div>
+        {% else %}
+        <!-- Empty state: Pilot launching placeholder -->
+        <div class="card" style="max-width: 500px; margin: 0 auto; text-align: center; padding: 2.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🚀</div>
+            <h3>Pilot Launching in Greater Boston</h3>
+            <p class="text-muted">We're onboarding the first 50 student coaches (HS/college). Join now to get priority access to paid after-school gigs.</p>
+            <a href="{% url 'marketplace:coach_join' %}" class="btn btn-primary">Join as Coach</a>
         </div>
         {% endif %}
     </div>
@@ -87,6 +90,7 @@
         <h2 class="text-center">Latest Opportunities</h2>
         <p class="text-center text-muted mb-4">Schools and programs looking for chess coaches</p>
         
+        {% if jobs %}
         <div class="card-grid">
             {% for job in jobs %}
             <a href="{% url 'marketplace:job_detail' job.pk %}" style="text-decoration: none;">
@@ -100,16 +104,18 @@
                     </div>
                 </div>
             </a>
-            {% empty %}
-            <div class="text-center" style="grid-column: 1/-1;">
-                <p class="text-muted">No jobs posted yet. <a href="{% url 'accounts:signup' %}?role=vendor">Post your first opportunity!</a></p>
-            </div>
             {% endfor %}
         </div>
-        
-        {% if jobs %}
         <div class="text-center mt-4">
             <a href="{% url 'marketplace:job_list' %}" class="btn btn-outline">View All Jobs</a>
+        </div>
+        {% else %}
+        <!-- Empty state: Vendor placeholder -->
+        <div class="card" style="max-width: 500px; margin: 0 auto; text-align: center; padding: 2.5rem;">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">🏫</div>
+            <h3>Vendors: Need a Coach?</h3>
+            <p class="text-muted">Post your needs and we'll match you with verified student coaches in Greater Boston.</p>
+            <a href="{% url 'marketplace:vendor_join' %}" class="btn btn-primary">Request Coaches</a>
         </div>
         {% endif %}
     </div>
@@ -121,8 +127,8 @@
         <h2>Ready to get started?</h2>
         <p class="text-muted mb-4">Join CoachKnight today and connect with the chess community.</p>
         <div class="hero-buttons">
-            <a href="{% url 'accounts:signup' %}?role=vendor" class="btn btn-primary">I'm Hiring Coaches</a>
-            <a href="{% url 'accounts:signup' %}?role=coach" class="btn btn-secondary">I'm a Coach</a>
+            <a href="{% url 'marketplace:vendor_join' %}" class="btn btn-primary">I'm Hiring Coaches</a>
+            <a href="{% url 'marketplace:coach_join' %}" class="btn btn-secondary">I'm a Coach</a>
         </div>
     </div>
 </section>
