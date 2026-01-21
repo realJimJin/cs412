@@ -16,16 +16,17 @@
             </a>
             <div class="nav-links">
                 {% if user.is_authenticated %}
-                    {% with user.userprofile as profile %}
-                        {% if profile.is_coach %}
-                            <a href="{% url 'accounts:coach_profile' %}">My Profile</a>
-                            <a href="{% url 'messaging:inbox' %}">Messages</a>
-                        {% elif profile.is_vendor %}
-                            <a href="{% url 'marketplace:search' %}">Find Coaches</a>
-                            <a href="{% url 'marketplace:vendor_dashboard' %}">Dashboard</a>
-                            <a href="{% url 'messaging:inbox' %}">Messages</a>
-                        {% endif %}
-                    {% endwith %}
+                    {% if user.is_staff %}
+                        <a href="{% url 'marketplace:staff_overview' %}">Staff Admin</a>
+                    {% endif %}
+                    {% if is_coach %}
+                        <a href="{% url 'marketplace:coach_dashboard' %}">Dashboard</a>
+                        <a href="{% url 'messaging:inbox' %}">Messages</a>
+                    {% elif is_vendor %}
+                        <a href="{% url 'marketplace:search' %}">Find Coaches</a>
+                        <a href="{% url 'marketplace:vendor_dashboard' %}">Dashboard</a>
+                        <a href="{% url 'messaging:inbox' %}">Messages</a>
+                    {% endif %}
                     <form action="{% url 'accounts:logout' %}" method="post" style="display:inline;">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-secondary" style="padding: 0.5rem 1rem;">Logout</button>
